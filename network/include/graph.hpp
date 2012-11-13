@@ -930,8 +930,6 @@ namespace scn //short for Su' Complex Networks
    public://network io
 
       virtual void WriteToNetFile(std::string path) = 0;
-
-      virtual void ReadFromNetFile(std::
   
    protected:
       
