@@ -20,8 +20,13 @@ ADD_EXECUTABLE(main_window
 )
 
 ADD_EXECUTABLE(test test_main.cpp)
+ADD_EXECUTABLE(sfsw sfsw_main.cpp)
 
 TARGET_LINK_LIBRARIES(test
+  network
+)
+
+TARGET_LINK_LIBRARIES(sfsw
   network
 )
 
