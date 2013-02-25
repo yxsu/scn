@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/graph.hpp"
+#include "../include/network.hpp"
 #include<string>
 #include<memory>
 #include<QtGui/QColor>

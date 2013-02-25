@@ -1,4 +1,4 @@
-#include "../include/graph.hpp"
+#include "../include/network.hpp"
 #include "../include/network_generator.hpp"
 #include "../include/network_measurements.hpp"
 using namespace std;
