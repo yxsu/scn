@@ -74,23 +74,23 @@ void URulerWidget::CreateWidget()
 void URulerWidget::ComputeBasicInfo(UGraph::pGraph graph)
 {
    Ruler ruler(graph);
-   // QImage image(QString::fromStdString(ruler.DrawDegreeDistribution()));
+   QImage image(QString::fromStdString(ruler.DrawDegreeDistribution()));
    auto size = graph->size();
    label_numberOfNode->setText(tr("%1").arg(size.first));
    label_numberOfEdge->setText(tr("%1").arg(size.second));
    label_average_degree->setText(tr("%1").arg(ruler.ComputeAverageDegree()));
    //generate picture
-   // label_image_degree_dist->setPixmap(
-   //   QPixmap::fromImage(image.scaledToWidth(width(),Qt::SmoothTransformation)));
+   label_image_degree_dist->setPixmap(
+   QPixmap::fromImage(image.scaledToWidth(width(),Qt::SmoothTransformation)));
    //
    label_cluster_coefficient->setText(tr("Computing..."));
    label_cluster_coefficient->setText(tr("%1").arg(ruler.GetClusteringCoeff()));
-   label_diameter->setText(tr("Computing..."));
+/*   label_diameter->setText(tr("Computing..."));
    label_average_distance->setText(tr("Computing..."));
     auto distance = ruler.GetDiameterAndAverageDistance();
    label_diameter->setText(tr("%1").arg(distance.first));
    label_average_distance->setText(tr("%1").arg(distance.second));
-
+*/
 /*
    label_lambda2->setText(tr("Computing..."));
    label_lambda_ratio->setText(tr("Computing..."));
@@ -98,12 +98,13 @@ void URulerWidget::ComputeBasicInfo(UGraph::pGraph graph)
    label_lambda2->setText(tr("%1").arg(lambda.first));
    label_lambda_ratio->setText(tr("%1").arg(lambda.second));
 */
+/*
    label_mrt->setText(tr("Computing..."));
    label_mrt->setText(tr("%1").arg(ruler.MRTofRandomWalk()));
 
    label_mfpt->setText(tr("Computing..."));
    label_mfpt->setText(tr("%1").arg(ruler.MFPTofRandomWalk()));
-
+*/
  //
 /*
    Matrix shortest_path = ruler.GetGeodesicMatrix();

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <queue>
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <list>
 #include <utility>
@@ -789,6 +790,14 @@ string scn::Ruler::DrawDegreeDistribution()
 	   else
 	      return false;
 	});
+   //save in text file
+   ofstream outfile("degree_distribution.txt");
+   outfile<<"degree     number of node"<<endl;
+   for(auto& i : pairs)
+   {
+      outfile<<i.first<<"    "<<i.second<<endl;
+   }
+   outfile.close();
    //draw
    scn::Gnuplot plot;
    std::string filename = "degree_distribution_auto_generated";
