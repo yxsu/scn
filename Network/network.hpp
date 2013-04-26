@@ -159,12 +159,12 @@ namespace scn
 	 uint64 index;
 	 if(*head < indexOfTail)
 	 {
-	    index = (*head) << 32;
+        index = uint64(*head) << 32;
 	    edge_data[index + indexOfTail] = data;
 	 }
 	 else
 	 {
-	    index = indexOfTail << 32;
+        index = uint64(indexOfTail) << 32;
 	    edge_data[index + *head] = data;
 	 }
       }
@@ -180,12 +180,12 @@ namespace scn
 	 uint64 index;
 	 if(indexOfHead < indexOfTail)
 	 {
-	    index = (indexOfHead) << 32;
+        index = uint64(indexOfHead) << 32;
 	    edge_data[index + indexOfTail] = data;
 	 }
 	 else
 	 {
-	    index = indexOfTail << 32;
+        index = uint64(indexOfTail) << 32;
 	    edge_data[index + indexOfHead] = data;
 	 }
       }
@@ -199,12 +199,12 @@ namespace scn
 	 uint64 index;
 	 if(*head < indexOfTail)
 	 {
-	    index = (*head) << 32;
+        index = uint64(*head) << 32;
 	    return edge_data[index + indexOfTail];
 	 }
 	 else
 	 {
-	    index = indexOfTail << 32;
+        index = uint64(indexOfTail) << 32;
 	    return edge_data[index + *head];
 	 }
       }
@@ -219,12 +219,12 @@ namespace scn
 	 uint64 index;
 	 if(indexOfHead < indexOfTail)
 	 {
-	    index = (indexOfHead) << 32;
+        index = uint64(indexOfHead) << 32;
 	    return edge_data[index + indexOfTail];
 	 }
 	 else
 	 {
-	    index = indexOfTail << 32;
+        index = uint64(indexOfTail) << 32;
 	    return edge_data[index + indexOfHead];
 	 }
       }
@@ -274,12 +274,12 @@ namespace scn
 	 uint64 index;
 	 if(reverse)
 	 {
-	    index = (*head) << 32;
+        index = uint64(*head) << 32;
 	    edge_data[index + indexOfTail] = data;
 	 }
 	 else
 	 {
-	    index = indexOfTail << 32;
+        index = uint64(indexOfTail) << 32;
 	    edge_data[index + *head] = data;
 	 }
       }
@@ -295,12 +295,12 @@ namespace scn
 	 uint64 index;
 	 if(reverse)
 	 {
-	    index = (indexOfHead) << 32;
+        index = uint64(indexOfHead) << 32;
 	    edge_data[index + indexOfTail] = data;
 	 }
 	 else
 	 {
-	    index = indexOfTail << 32;
+        index = uint64(indexOfTail) << 32;
 	    edge_data[index + indexOfHead] = data;
 	 }
       }
@@ -314,12 +314,12 @@ namespace scn
 	 uint64 index;
 	 if(reverse)
 	 {
-	    index = (*head) << 32;
+        index = uint64(*head) << 32;
 	    return edge_data[index + indexOfTail];
 	 }
 	 else
 	 {
-	    index = indexOfTail << 32;
+        index = uint64(indexOfTail) << 32;
 	    return edge_data[index + *head];
 	 }
       }
@@ -334,12 +334,12 @@ namespace scn
 	 uint64 index;
 	 if(reverse)
 	 {
-	    index = (indexOfHead) << 32;
+        index = uint64(indexOfHead) << 32;
 	    return edge_data[index + indexOfTail];
 	 }
 	 else
 	 {
-	    index = indexOfTail << 32;
+        index = uint64(indexOfTail) << 32;
 	    return edge_data[index + indexOfHead];
 	 }
       }

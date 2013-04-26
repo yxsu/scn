@@ -388,6 +388,7 @@ namespace scn //short for Su' Complex Networks
       UGraph(size_t numberOfNodes):Graph(numberOfNodes){}
 
       UGraph(UGraph &other)
+          :Graph(other)
       {
 	 //add node
 	 for(auto node = other.begin(); node != other.end(); node++)
@@ -411,16 +412,16 @@ namespace scn //short for Su' Complex Networks
 
    public://implementation of virtual function
 
-      inline virtual bool AddEdge(size_t indexOfHead, size_t indexOfTail, 
-				  bool reverse = false)
+      inline virtual bool AddEdge(size_t indexOfHead, size_t indexOfTail,
+                                  bool reverse = false)
       {
-	 assert(HasNode(indexOfHead));
-	 assert(HasNode(indexOfTail));
-	 assert(indexOfHead != indexOfTail);
-	 
-	 node_list[indexOfHead].in_degree.insert(indexOfTail);
-	 node_list[indexOfTail].in_degree.insert(indexOfHead);
-	 return true;
+          assert(HasNode(indexOfHead));
+          assert(HasNode(indexOfTail));
+          assert(indexOfHead != indexOfTail);
+
+          node_list[indexOfHead].in_degree.insert(indexOfTail);
+          node_list[indexOfTail].in_degree.insert(indexOfHead);
+          return true;
       }
 
       inline virtual bool AddEdge(size_t indexOfHead, IndexList& list, bool reverse = false)

@@ -12,6 +12,7 @@
 #include<QtCore/QTextStream>
 #include<QtCore/QString>
 #include<cmath>
+#include<ctime>
 using namespace scn;
 using namespace std;
 
