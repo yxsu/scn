@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1017</width>
+    <height>646</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QGraphicsView" name="graphivsView_main"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1017</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="action_open_net_file"/>
+    <addaction name="action_save_net_file"/>
+    <addaction name="separator"/>
+    <addaction name="action_exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_create_network">
+    <property name="title">
+     <string>&amp;Create Network</string>
+    </property>
+    <addaction name="action_regular_network"/>
+    <addaction name="action_random_network"/>
+    <addaction name="action_ws_small_world"/>
+    <addaction name="action_nw_small_world"/>
+    <addaction name="action_scale_free_network"/>
+    <addaction name="separator"/>
+    <addaction name="action_small_world_from_edge_iteration"/>
+    <addaction name="action_uniform_recursive_tree"/>
+    <addaction name="action_durt_network"/>
+    <addaction name="action_small_world_from_durt"/>
+    <addaction name="action_community_network"/>
+    <addaction name="action_tsd_sfsw_network"/>
+    <addaction name="action_tsd_sw_network"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menu_create_network"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget">
+   <property name="maximumSize">
+    <size>
+     <width>300</width>
+     <height>524287</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>Measurement</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidget_ruler">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_recompute">
+       <property name="text">
+        <string>Re-Compute</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QCheckBox" name="checkBox_node">
+         <property name="text">
+          <string>Number of Node</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_node"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QCheckBox" name="checkBox_edge">
+         <property name="text">
+          <string>Number of Edge</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_edge"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QCheckBox" name="checkBox_clustering_coefficient">
+         <property name="text">
+          <string>Clustering Coefficient</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_clustering_coefficient"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QCheckBox" name="checkBox_average_degree">
+         <property name="text">
+          <string>Average Degree</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_average_degree"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QCheckBox" name="checkBox_diameter">
+         <property name="text">
+          <string>Diameter</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_diameter"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QCheckBox" name="checkBox_average_distance">
+         <property name="text">
+          <string>Average Distance</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_average_distance"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>297</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="action_open_net_file">
+   <property name="text">
+    <string>&amp;Open a Net File</string>
+   </property>
+  </action>
+  <action name="action_save_net_file">
+   <property name="text">
+    <string>&amp;Save to Net File</string>
+   </property>
+  </action>
+  <action name="action_exit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="action_regular_network">
+   <property name="text">
+    <string>Regular Network</string>
+   </property>
+  </action>
+  <action name="action_ws_small_world">
+   <property name="text">
+    <string>WS Small World</string>
+   </property>
+  </action>
+  <action name="action_nw_small_world">
+   <property name="text">
+    <string>NW Small World</string>
+   </property>
+  </action>
+  <action name="action_random_network">
+   <property name="text">
+    <string>Random Network</string>
+   </property>
+  </action>
+  <action name="action_scale_free_network">
+   <property name="text">
+    <string>Scale-free Network</string>
+   </property>
+  </action>
+  <action name="action_small_world_from_edge_iteration">
+   <property name="text">
+    <string>Small World from Edge Iteration</string>
+   </property>
+  </action>
+  <action name="action_uniform_recursive_tree">
+   <property name="text">
+    <string>Uniform Recursive Tree</string>
+   </property>
+  </action>
+  <action name="action_durt_network">
+   <property name="text">
+    <string>DURT</string>
+   </property>
+  </action>
+  <action name="action_small_world_from_durt">
+   <property name="text">
+    <string>Small World From DURT</string>
+   </property>
+  </action>
+  <action name="action_community_network">
+   <property name="text">
+    <string>Community Network</string>
+   </property>
+  </action>
+  <action name="action_tsd_sfsw_network">
+   <property name="text">
+    <string>TSD-SFSW Network</string>
+   </property>
+   <property name="toolTip">
+    <string>TSD-SFSW Network</string>
+   </property>
+   <property name="statusTip">
+    <string/>
+   </property>
+   <property name="whatsThis">
+    <string>Create a Tree-Structured Deterministic Scale-free Small World Network</string>
+   </property>
+  </action>
+  <action name="action_tsd_sw_network">
+   <property name="text">
+    <string>TSD-SW Network</string>
+   </property>
+   <property name="toolTip">
+    <string>TSD-SW Network</string>
+   </property>
+   <property name="whatsThis">
+    <string>Create a Tree-Structured Deterministic Small World Network</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>action_exit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>327</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
