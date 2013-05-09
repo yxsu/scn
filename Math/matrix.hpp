@@ -1,18 +1,12 @@
 #pragma once
 #include "math_global.h"
 #include<cassert>
+#include<vector>
 #include<valarray>
 #include<string>
 #include<utility>
 extern "C++" class Matrix;
-using std::pair;
-using std::size_t;
-using std::initializer_list;
-using std::slice;
-using std::slice_array;
-using std::gslice_array;
-using std::valarray;
-using std::string;
+using namespace std;
 
 class MATHSHARED_EXPORT Matrix
 {
@@ -43,7 +37,7 @@ public:
  * @param list -  list 
  * @return Matrix
  */
-   Matrix(size_t width, initializer_list<double> list);
+ //  Matrix(size_t width, initializer_list<double> list);
 /**
  * @name Matrix - Copy constructor
  * @param other -  other 

@@ -17,19 +17,21 @@ Matrix::Matrix()
 }
 
 Matrix::Matrix(size_t height, size_t width)
-   : height(height), width(width), vdata(width * height)
+   : vdata(width * height)
 {
+    this->height = height;
+    this->width = width;
 }
-
+/*
 Matrix::Matrix(size_t width, initializer_list<double> list)
    :width(width)
 {
    size_t temp = list.size() / width;
    height = temp * width == list.size() ? temp : temp + 1;
    vdata.resize(width * height);
-   vdata[gslice(0, {height, width}, {1, height})] = list;
+   vdata[gslice(0, {height, width}, {1, height})] = valarray<double>(list);
 }
-
+*/
 Matrix::Matrix(Matrix &&other) noexcept
 :width(other.width), height(other.height), vdata(other.vdata)
 {   

@@ -8,9 +8,12 @@ QT       -= gui
 
 TARGET = Network
 TEMPLATE = lib
-
+CONFIG += lib_bundle
 DEFINES += NETWORK_LIBRARY
-QMAKE_CXXFLAGS += -std=c++11
+
+mac:QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
+else:QMAKE_CXXFLAGS += -std=c++11
+
 SOURCES += \
     network_measurements.cpp \
     network_generator.cpp \
@@ -37,6 +40,7 @@ unix:!symbian {
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Math/release/ -lMath
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Math/debug/ -lMath
+else:mac: LIBS += -F$$OUT_PWD/../Math/ -framework Math
 else:unix: LIBS += -L$$OUT_PWD/../Math/ -lMath
 
 INCLUDEPATH += $$PWD/../Math

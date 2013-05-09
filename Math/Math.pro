@@ -8,9 +8,11 @@ QT       -= gui
 
 TARGET = Math
 TEMPLATE = lib
-
+CONFIG += lib_bundle
 DEFINES += MATH_LIBRARY
+
 QMAKE_CXXFLAGS += -std=c++11
+
 SOURCES += \
     wavelet.cpp \
     sym_matrix.cpp \
