@@ -149,35 +149,70 @@ int QNodeItem::roundness(double size) const
     return 50 * Diameter / int(size);
 }
 
-QEdgeItem::QEdgeItem(QPointF &&pos1, QPointF &&pos2)
+QEdgeItem::QEdgeItem(QPointF &&head, QPointF &&tail, bool isDirected)
    :weight(1)
 {
    isDashed = false;
+   this->isDirected = isDirected;
+   this->head = head;
+   this->tail = tail;
    setFlags(QGraphicsItem::ItemIsSelectable);
    setZValue(-1);
-   setPen(QPen(Qt::darkRed, 1.0));
-   setLine(QLineF(pos1, pos2));
 }
 
 QEdgeItem::~QEdgeItem()
 {
 }
 
+void QEdgeItem::paint(QPainter *painter,
+              const QStyleOptionGraphicsItem *option,
+              QWidget*  widget)
+{
+    painter->setPen(QPen(Qt::darkRed, 1.0));
+    //draw line
+    painter->drawLine(head, tail);
+    //draw triangle
+    if(this->isDirected)
+    {
+        QLineF line(head, tail);
+        line.setP1(QPointF((head.x() + tail.x())/2, (head.y() + tail.y())/2));
+        line.setLength(5);
+        QPointF points[3];
+        points[0] = line.p2();
+        line.setAngle(line.angle() + 90);
+        points[1] = line.p2();
+        line.setAngle(line.angle() + 180);
+        points[2] = line.p2();
+        painter->drawPolygon(points, 3);
+    }
+}
+
+QRectF QEdgeItem::boundingRect() const
+{
+
+    return QRectF(min(head.x(), tail.x()), min(head.y(), tail.y()),
+                  abs(head.x() - tail.x()), abs(head.y() - tail.y())).adjusted(-1, -1, 1, 1);
+}
+
 void QEdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
    isDashed = ! isDashed;
+   /*
    QPen pen;
    if(isDashed)
-      setPen(QPen(Qt::darkRed, 1.0, Qt::DashDotLine));
+      //setPen(QPen(Qt::darkRed, 1.0, Qt::DashDotLine));
    else
-      setPen(QPen(Qt::darkRed, 1.0));
+      //setPen(QPen(Qt::darkRed, 1.0));
    
    setLine(line());
+   */
 }
 
-void QEdgeItem::UpdatePosition(QPointF &&pos1, QPointF &&pos2)
+void QEdgeItem::UpdatePosition(QPointF &&head, QPointF &&tail)
 {
-   setLine(QLineF(pos1, pos2));
+    this->head = head;
+    this->tail = tail;
+    update(boundingRect());
 }
 
 size_t QUNetwork::CreateScene(size_t numberOfNode)
@@ -209,7 +244,7 @@ QUNetwork::QUNetwork(UGraph::pGraph &graph)
       for(auto other = node->begin(); other != node->end(); other++)
       {
 	 data = new QEdgeItem(GetNodeData(node)->pos(),
-			      GetNodeData(*other)->pos());
+                  GetNodeData(*other)->pos());
 	 
 	 SetEdgeData(node, *other, data);
       }
@@ -291,8 +326,8 @@ void QUNetwork::RedrawNode(size_t indexOfNode)
    auto node = graph->find(indexOfNode);
    for(auto other = node->begin(); other != node->end(); other++)
    {
-      GetEdgeData(node, *other)->UpdatePosition(
-	 GetNodeData(node)->pos(), GetNodeData(*other)->pos());
+       GetEdgeData(node, *other)->UpdatePosition(
+                   GetNodeData(node)->pos(), GetNodeData(*other)->pos());
    }
 }
 

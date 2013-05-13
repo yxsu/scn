@@ -55,15 +55,19 @@ private:
     QColor outline_color;
 };
    
-class QEdgeItem : public QGraphicsLineItem
+class QEdgeItem : public QGraphicsItem
 {
 public:
 
-    QEdgeItem(QPointF &&pos1, QPointF &&pos2);
+    QEdgeItem(QPointF &&pos1, QPointF &&pos2, bool isDirected = false);
 
     ~QEdgeItem();
 
     void UpdatePosition(QPointF &&pos1, QPointF &&pos2);
+
+    QRectF boundingRect() const;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 public://edge data
     double weight;
@@ -72,6 +76,9 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 private:
     bool isDashed;
+    bool isDirected;
+    QPointF head;
+    QPointF tail;
 };
 
 class QUNetwork
