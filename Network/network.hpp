@@ -33,29 +33,29 @@ namespace scn
 
    public://operation about node
       
-      void SetNodeData(typename GraphType::iterator &node, pNode &data)
+      virtual void SetNodeData(typename GraphType::iterator &node, pNode &data)
       {
 	 node_data[*node] = data;
       }
 
-      void SetNodeData(size_t indexOfNode, pNode &data)
+      virtual void SetNodeData(size_t indexOfNode, pNode &data)
       {
 	 assert(graph->HasNode(indexOfNode));
 	 node_data[indexOfNode] = data;
       }
 
-      pNode GetNodeData(typename GraphType::iterator &node)
+     virtual pNode GetNodeData(typename GraphType::iterator &node)
       {
 	 return node_data[*node];
       }
 
-      pNode GetNodeData(size_t indexOfNode)
+     virtual pNode GetNodeData(size_t indexOfNode)
       {
 	 assert(graph->HasNode(indexOfNode));
 	 return node_data[indexOfNode];
       }
       
-      void SetNodePosition(size_t indexOfNode, double x, double y, double z)
+     void SetNodePosition(size_t indexOfNode, double x, double y, double z)
       {
 	 assert(graph->HasNode(indexOfNode));
 	 std::array<double, 3> temp;
@@ -124,7 +124,7 @@ namespace scn
 
    template<typename NodeData = size_t, typename EdgeData = double>
    class UNetwork
-      :public Network<UGraph, NodeData, EdgeData> 
+      :virtual public Network<UGraph, NodeData, EdgeData>
    {
    public:
        using typename Network<UGraph, NodeData, EdgeData>::pNode;
