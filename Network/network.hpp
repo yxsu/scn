@@ -33,29 +33,29 @@ namespace scn
 
    public://operation about node
       
-      void SetNodeData(typename GraphType::iterator &node, pNode &data)
+      virtual void SetNodeData(typename GraphType::iterator &node, pNode &data)
       {
 	 node_data[*node] = data;
       }
 
-      void SetNodeData(size_t indexOfNode, pNode &data)
+      virtual void SetNodeData(size_t indexOfNode, pNode &data)
       {
 	 assert(graph->HasNode(indexOfNode));
 	 node_data[indexOfNode] = data;
       }
 
-      pNode GetNodeData(typename GraphType::iterator &node)
+     virtual pNode GetNodeData(typename GraphType::iterator &node)
       {
 	 return node_data[*node];
       }
 
-      pNode GetNodeData(size_t indexOfNode)
+     virtual pNode GetNodeData(size_t indexOfNode)
       {
 	 assert(graph->HasNode(indexOfNode));
 	 return node_data[indexOfNode];
       }
       
-      void SetNodePosition(size_t indexOfNode, double x, double y, double z)
+     void SetNodePosition(size_t indexOfNode, double x, double y, double z)
       {
 	 assert(graph->HasNode(indexOfNode));
 	 std::array<double, 3> temp;
@@ -85,37 +85,31 @@ namespace scn
    public://operation about edge, all of them are pure virtual function
       
       virtual void SetEdgeData(typename GraphType::iterator head, size_t indexOfTail,
-			       pEdge &data, bool reverse = false) = 0;
+                   pEdge &data) = 0;
 
       virtual void SetEdgeData(size_t indexOfHead, size_t indexOfTail,
-			       pEdge &data, bool reverse = false) = 0;
+                   pEdge &data) = 0;
       
       
-      virtual pEdge GetEdgeData(typename GraphType::iterator head, size_t indexOfTail,
-				bool reverse = false) = 0;
+      virtual pEdge GetEdgeData(typename GraphType::iterator head, size_t indexOfTail) = 0;
 
-      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail,
-				bool reverse = false) = 0;
-
-   public://network io
-
-      virtual void WriteToNetFile(std::string path) = 0;
+      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail) = 0;
   
    protected:
       
       void CreateCirclePosition(double origin_x, double origin_y, double radius)
       {
-	 double angle = 0;
-	 double delta = 2 * 3.14 / graph->GetNumberOfNodes();
-	 
-	 for(auto node = graph->begin(); node != graph->end(); node++, angle+=delta)
-	 {
-	    std::array<double, 3> temp;
-	    temp[0] = origin_x + radius * cos(angle);//x
-	    temp[1] = origin_y + radius * sin(angle);//y
-	    temp[2] = 0.5;
-	    SetNodePosition(*node, temp);
-	 }
+          double angle = 0;
+          double delta = 2 * 3.14 / graph->GetNumberOfNodes();
+
+          for(auto node = graph->begin(); node != graph->end(); node++, angle+=delta)
+          {
+              std::array<double, 3> temp;
+              temp[0] = origin_x + radius * cos(angle);//x
+              temp[1] = origin_y + radius * sin(angle);//y
+              temp[2] = 0.5;
+              SetNodePosition(*node, temp);
+          }
       }
    protected:
       typename GraphType::pGraph graph;
@@ -130,12 +124,12 @@ namespace scn
 
    template<typename NodeData = size_t, typename EdgeData = double>
    class UNetwork
-      :public Network<UGraph, NodeData, EdgeData> 
+      :virtual public Network<UGraph, NodeData, EdgeData>
    {
    public:
-      typedef NodeData* pNode;
-      typedef EdgeData* pEdge;
-      typedef std::shared_ptr<UNetwork> pNetwork;
+       using typename Network<UGraph, NodeData, EdgeData>::pNode;
+       using typename Network<UGraph, NodeData, EdgeData>::pEdge;
+       typedef std::shared_ptr<UNetwork> pNetwork;
 /**
  * @name UNetwork - Constructor with specified network topology. The
  * index in network topology must be less  than 2^32.
@@ -143,7 +137,7 @@ namespace scn
  * @return UNetwork
  */
       UNetwork(UGraph::pGraph graph)
-	 :Network<UGraph, NodeData, EdgeData>(graph)
+          :Network<UGraph, NodeData, EdgeData>(graph)
       {
       }
 
@@ -151,7 +145,7 @@ namespace scn
    public:
       
       virtual void SetEdgeData(UGraph::iterator head, size_t indexOfTail,
-			       pEdge &data, bool reverse = false)
+                   pEdge &data)
       {
 	 assert(*head <= 0xffffffff);
 	 assert(indexOfTail <= 0xffffffff);
@@ -170,7 +164,7 @@ namespace scn
       }
 
       virtual void SetEdgeData(size_t indexOfHead, size_t indexOfTail,
-			       pEdge &data, bool reverse = false)
+                   pEdge &data)
       {
 	 assert(indexOfHead <= 0xffffffff);
 	 assert(indexOfTail <= 0xffffffff);
@@ -190,8 +184,7 @@ namespace scn
 	 }
       }
       
-      virtual pEdge GetEdgeData(UGraph::iterator head, size_t indexOfTail,
-				bool reverse = false)
+      virtual pEdge GetEdgeData(UGraph::iterator head, size_t indexOfTail)
       {
 	 assert(*head <= 0xffffffff);
 	 assert(indexOfTail <= 0xffffffff);
@@ -209,8 +202,7 @@ namespace scn
 	 }
       }
 
-      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail,
-				bool reverse = false)
+      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail)
       {
 	 assert(indexOfHead <= 0xffffffff);
 	 assert(indexOfTail <= 0xffffffff);
@@ -227,11 +219,6 @@ namespace scn
         index = uint64(indexOfTail) << 32;
 	    return edge_data[index + indexOfHead];
 	 }
-      }
-
-      virtual void WriteToNetFile(std::string path)
-      {
-
       }
 
    protected:
@@ -248,9 +235,9 @@ namespace scn
       :public Network<DGraph, NodeData, EdgeData> 
    {
    public:
-      typedef NodeData* pNode;
-      typedef EdgeData* pEdge;
-      typedef std::shared_ptr<DNetwork> pNetwork;
+       using typename Network<DGraph, NodeData, EdgeData>::pNode;
+       using typename Network<DGraph, NodeData, EdgeData>::pEdge;
+       typedef std::shared_ptr<DNetwork> pNetwork;
 /**
  * @name DNetwork - Constructor with specified network topology. The
  * index in network topology must be less  than 2^32.
@@ -266,88 +253,52 @@ namespace scn
    public:
       
       virtual void SetEdgeData(DGraph::iterator head, size_t indexOfTail,
-			       pEdge &data, bool reverse = false)
+                   pEdge &data)
       {
-	 assert(*head <= 0xffffffff);
-	 assert(indexOfTail <= 0xffffffff);
-	 assert(graph->HasNode(indexOfTail));
-	 uint64 index;
-	 if(reverse)
-	 {
-        index = uint64(*head) << 32;
-	    edge_data[index + indexOfTail] = data;
-	 }
-	 else
-	 {
-        index = uint64(indexOfTail) << 32;
-	    edge_data[index + *head] = data;
-	 }
+          assert(*head <= 0xffffffff);
+          assert(indexOfTail <= 0xffffffff);
+          assert(graph->HasNode(indexOfTail));
+          uint64 index;
+
+          index = uint64(indexOfTail) << 32;
+          edge_data[index + *head] = data;
       }
 
       virtual void SetEdgeData(size_t indexOfHead, size_t indexOfTail,
-			       pEdge &data, bool reverse = false)
+                   pEdge &data)
       {
-	 assert(indexOfHead <= 0xffffffff);
-	 assert(indexOfTail <= 0xffffffff);
-	 assert(graph->HasNode(indexOfHead));
-	 assert(graph->HasNode(indexOfTail));
+          assert(indexOfHead <= 0xffffffff);
+          assert(indexOfTail <= 0xffffffff);
+          assert(graph->HasNode(indexOfHead));
+          assert(graph->HasNode(indexOfTail));
 
-	 uint64 index;
-	 if(reverse)
-	 {
-        index = uint64(indexOfHead) << 32;
-	    edge_data[index + indexOfTail] = data;
-	 }
-	 else
-	 {
-        index = uint64(indexOfTail) << 32;
-	    edge_data[index + indexOfHead] = data;
-	 }
+          uint64 index;
+          index = uint64(indexOfTail) << 32;
+          edge_data[index + indexOfHead] = data;
       }
       
-      virtual pEdge GetEdgeData(DGraph::iterator head, size_t indexOfTail,
-				bool reverse = false)
+      virtual pEdge GetEdgeData(DGraph::iterator head, size_t indexOfTail)
       {
-	 assert(*head <= 0xffffffff);
-	 assert(indexOfTail <= 0xffffffff);
-	 assert(graph->HasNode(indexOfTail));
-	 uint64 index;
-	 if(reverse)
-	 {
-        index = uint64(*head) << 32;
-	    return edge_data[index + indexOfTail];
-	 }
-	 else
-	 {
-        index = uint64(indexOfTail) << 32;
-	    return edge_data[index + *head];
-	 }
+          assert(*head <= 0xffffffff);
+          assert(indexOfTail <= 0xffffffff);
+          assert(graph->HasNode(indexOfTail));
+          uint64 index;
+
+          index = uint64(indexOfTail) << 32;
+          return edge_data[index + *head];
       }
 
-      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail,
-				bool reverse = false)
+      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail)
       {
-	 assert(indexOfHead <= 0xffffffff);
-	 assert(indexOfTail <= 0xffffffff);
-	 assert(graph->HasNode(indexOfHead));
-	 assert(graph->HasNode(indexOfTail));
-	 uint64 index;
-	 if(reverse)
-	 {
-        index = uint64(indexOfHead) << 32;
-	    return edge_data[index + indexOfTail];
-	 }
-	 else
-	 {
-        index = uint64(indexOfTail) << 32;
-	    return edge_data[index + indexOfHead];
-	 }
+          assert(indexOfHead <= 0xffffffff);
+          assert(indexOfTail <= 0xffffffff);
+          assert(graph->HasNode(indexOfHead));
+          assert(graph->HasNode(indexOfTail));
+          uint64 index;
+          index = uint64(indexOfTail) << 32;
+          return edge_data[index + indexOfHead];
       }
 
-      virtual void WriteToNetFile(std::string path)
-      {
-
-      }
    protected:
       using Network<UGraph, NodeData, EdgeData>::graph;
       using Network<UGraph, NodeData, EdgeData>::position;

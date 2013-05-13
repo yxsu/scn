@@ -311,29 +311,27 @@ namespace scn //short for Su' Complex Networks
 
    public://edge operations, all of them are abstract virtual function
 
-      virtual bool AddEdge(size_t indexOfHead, size_t indexOfTail, bool reverse=false)=0;
+      virtual bool AddEdge(size_t indexOfHead, size_t indexOfTail)=0;
 
-      virtual bool AddEdge(size_t indexOfHead, IndexList& list, bool reverse=false)=0;
+      virtual bool AddEdge(size_t indexOfHead, IndexList& list)=0;
 
-      virtual bool AddEdge(iterator& head, size_t indexOfTail, bool reverse = false)=0;
+      virtual bool AddEdge(iterator head, size_t indexOfTail)=0;
 
-      virtual bool AddEdge(iterator head, IndexList& list, bool reverse=false)=0;
+      virtual bool AddEdge(iterator head, IndexList& list)=0;
 
-      virtual bool AddEdge(iterator& head, iterator& tail, bool reverse = false) = 0;
+      virtual bool AddEdge(iterator head, iterator tail) = 0;
 
-      virtual bool RemoveEdge(size_t indexOfHead, size_t indexOfTail, 
-			      bool reverse = false)=0;
+      virtual bool RemoveEdge(size_t indexOfHead, size_t indexOfTail)=0;
 
-      virtual bool RemoveEdge(iterator& head, size_t indexOfTail, 
-			      bool reverse = false)=0;
+      virtual bool RemoveEdge(iterator head, size_t indexOfTail)=0;
       
-      virtual bool RemoveEdge(iterator& head, iterator& tail, bool reverse = false)=0;
+      virtual bool RemoveEdge(iterator head, iterator tail)=0;
 
-      virtual bool HasEdge(size_t indexOfHead, size_t indexOfTail, bool reverse=false)=0;
+      virtual bool HasEdge(size_t indexOfHead, size_t indexOfTail)=0;
       
-      virtual bool HasEdge(iterator& head, size_t indexOfTail, bool reverse = false)=0;
+      virtual bool HasEdge(iterator head, size_t indexOfTail)=0;
 
-      virtual bool HasEdge(iterator& head, iterator& tail, bool reverse = false)=0;
+      virtual bool HasEdge(iterator head, iterator tail)=0;
 
    public://STL pattern
       
@@ -412,8 +410,7 @@ namespace scn //short for Su' Complex Networks
 
    public://implementation of virtual function
 
-      inline virtual bool AddEdge(size_t indexOfHead, size_t indexOfTail,
-                                  bool reverse = false)
+      inline virtual bool AddEdge(size_t indexOfHead, size_t indexOfTail)
       {
           assert(HasNode(indexOfHead));
           assert(HasNode(indexOfTail));
@@ -424,7 +421,7 @@ namespace scn //short for Su' Complex Networks
           return true;
       }
 
-      inline virtual bool AddEdge(size_t indexOfHead, IndexList& list, bool reverse = false)
+      inline virtual bool AddEdge(size_t indexOfHead, IndexList& list)
       {
 	 assert(HasNode(indexOfHead));
 	 for(auto tail = list.begin(); tail != list.end(); tail++)
@@ -438,8 +435,7 @@ namespace scn //short for Su' Complex Networks
 	 return true;
       }
 
-      inline virtual bool AddEdge(iterator& head, size_t indexOfTail,
-				  bool reverse = false)
+      inline virtual bool AddEdge(iterator head, size_t indexOfTail)
       {
 	 assert(HasNode(indexOfTail));
 	 assert(*head != indexOfTail);
@@ -449,7 +445,7 @@ namespace scn //short for Su' Complex Networks
 	 return true;
       }
 
-      inline virtual bool AddEdge(iterator head, IndexList& list, bool reverse = false)
+      inline virtual bool AddEdge(iterator head, IndexList& list)
       {
 	 for(auto tail = list.begin(); tail != list.end(); tail++)
 	 {
@@ -462,8 +458,7 @@ namespace scn //short for Su' Complex Networks
 	 return true;
       }
 
-      inline virtual bool AddEdge(iterator& head, iterator& tail,
-				  bool reverse = false)
+      inline virtual bool AddEdge(iterator head, iterator tail)
       {
 	 assert(head != tail);
 	 
@@ -474,8 +469,7 @@ namespace scn //short for Su' Complex Networks
       }
 
 
-      inline virtual bool RemoveEdge(size_t indexOfHead, size_t indexOfTail, 
-				     bool reverse = false)
+      inline virtual bool RemoveEdge(size_t indexOfHead, size_t indexOfTail)
       {
 	 assert(HasNode(indexOfHead));
 	 assert(HasNode(indexOfTail));
@@ -486,8 +480,7 @@ namespace scn //short for Su' Complex Networks
 	 return true;
       }
 
-      inline virtual bool RemoveEdge(iterator& head, size_t indexOfTail, 
-				     bool reverse = false)
+      inline virtual bool RemoveEdge(iterator head, size_t indexOfTail)
       {
 	 assert(HasNode(indexOfTail));
 	 
@@ -496,8 +489,7 @@ namespace scn //short for Su' Complex Networks
 	 return true;
       }
       
-      inline virtual bool RemoveEdge(iterator& head, iterator& tail,
-				     bool reverse = false)
+      inline virtual bool RemoveEdge(iterator head, iterator tail)
       {
 	 head->in_degree.erase(*tail);
 	 tail->in_degree.erase(*head);
@@ -505,8 +497,7 @@ namespace scn //short for Su' Complex Networks
 	 return true;
       }
 
-      inline virtual bool HasEdge(size_t indexOfHead, size_t indexOfTail, 
-				  bool reverse = false)
+      inline virtual bool HasEdge(size_t indexOfHead, size_t indexOfTail)
       {
 	 assert(HasNode(indexOfHead));
 	 assert(HasNode(indexOfTail));
@@ -517,8 +508,7 @@ namespace scn //short for Su' Complex Networks
 	    return true;
       }
       
-      inline virtual bool HasEdge(iterator& head, size_t indexOfTail, 
-				  bool reverse = false)
+      inline virtual bool HasEdge(iterator head, size_t indexOfTail)
       {
 	 assert(HasNode(indexOfTail));
 	 
@@ -530,8 +520,7 @@ namespace scn //short for Su' Complex Networks
       }
 
 
-      inline virtual bool HasEdge(iterator& head, iterator& tail, 
-			   bool reverse = false)
+      inline virtual bool HasEdge(iterator head, iterator tail)
       {
 	 if(head->in_degree.find(*tail) == 
 	    head->in_degree.end())
@@ -606,233 +595,123 @@ namespace scn //short for Su' Complex Networks
 
    public://implementation of virtual function
 
-      inline virtual bool AddEdge(size_t indexOfHead, size_t indexOfTail,
-				  bool reverse = false)
+      inline virtual bool AddEdge(size_t indexOfHead, size_t indexOfTail)
       {
-	 assert(HasNode(indexOfHead));
-	 assert(HasNode(indexOfTail));
-	 assert(indexOfHead != indexOfTail);
-	 if(reverse)
-	 {
-	    node_list[indexOfHead].out_degree.insert(indexOfTail);
-	    node_list[indexOfTail].in_degree.insert(indexOfHead);
-	 }
-	 else
-	 {
-	    node_list[indexOfHead].in_degree.insert(indexOfTail);
-	    node_list[indexOfTail].out_degree.insert(indexOfHead);
-	 }
-	 return true;
+          assert(HasNode(indexOfHead));
+          assert(HasNode(indexOfTail));
+          assert(indexOfHead != indexOfTail);
+
+          node_list[indexOfHead].in_degree.insert(indexOfTail);
+          node_list[indexOfTail].out_degree.insert(indexOfHead);
+          return true;
       }
       
-      inline virtual bool AddEdge(size_t indexOfHead, IndexList& list, bool reverse = false)
+      inline virtual bool AddEdge(size_t indexOfHead, IndexList& list)
       {
-	 assert(HasNode(indexOfHead));
-	
-	 if(reverse)
-	 {
-	    for(auto tail = list.begin(); tail != list.end(); tail++)
-	    {
-	       assert(HasNode(*tail));
-	       assert(indexOfHead != *tail);
-	 
-	       node_list[indexOfHead].out_degree.insert(*tail);
-	       node_list[*tail].in_degree.insert(indexOfHead);
-	    }
-	 }
-	 else
-	 {
-	    for(auto tail = list.begin(); tail != list.end(); tail++)
-	    {
-	       assert(HasNode(*tail));
-	       assert(indexOfHead != *tail);
-	       
-	       node_list[indexOfHead].in_degree.insert(*tail);
-	       node_list[*tail].out_degree.insert(indexOfHead);
-	    }
-	 }
-	 return true;
+          assert(HasNode(indexOfHead));
+          for(auto tail = list.begin(); tail != list.end(); tail++)
+          {
+              assert(HasNode(*tail));
+              assert(indexOfHead != *tail);
+
+              node_list[indexOfHead].in_degree.insert(*tail);
+              node_list[*tail].out_degree.insert(indexOfHead);
+          }
+          return true;
       }
 
-      inline virtual bool AddEdge(iterator& head, size_t indexOfTail,
-				  bool reverse = false)
+      inline virtual bool AddEdge(iterator head, size_t indexOfTail)
       {
-	 assert(HasNode(indexOfTail));
-	 if(reverse)
-	 {
-	    head->out_degree.insert(indexOfTail);
-	    node_list[indexOfTail].in_degree.insert(*head);
-	 }
-	 else
-	 {
-	    head->in_degree.insert(indexOfTail);
-	    node_list[indexOfTail].out_degree.insert(*head);
-	 }
-	 return true;
+          assert(HasNode(indexOfTail));
+
+          head->in_degree.insert(indexOfTail);
+          node_list[indexOfTail].out_degree.insert(*head);
+
+          return true;
       }
 
-      inline virtual bool AddEdge(iterator& head, IndexList& list, bool reverse = false)
+      inline virtual bool AddEdge(iterator head, IndexList& list)
       {
-	 if(reverse)
-	 {
-	    for(auto tail = list.begin(); tail != list.end(); tail++)
-	    {
-	        assert(HasNode(*tail));
 
-		head->out_degree.insert(*tail);
-		node_list[*tail].in_degree.insert(*head);
-	    }
-	 }
-	 else
-	 {
-	    for(auto tail = list.begin(); tail != list.end(); tail++)
-	    {
-	        assert(HasNode(*tail));
+          for(auto tail = list.begin(); tail != list.end(); tail++)
+          {
+              assert(HasNode(*tail));
 
-		head->in_degree.insert(*tail);
-		node_list[*tail].out_degree.insert(*head);
-	    }
-	 }
-	 return true;
+              head->in_degree.insert(*tail);
+              node_list[*tail].out_degree.insert(*head);
+          }
+
+          return true;
       }
 
 
-      inline virtual bool AddEdge(iterator& head, iterator& tail,
-				  bool reverse = false)
+      inline virtual bool AddEdge(iterator head, iterator tail)
       {
-	 if(reverse)
-	 {
-	    head->out_degree.insert(*tail);
-	    tail->in_degree.insert(*head);
-	 }
-	 else
-	 {
-	    head->in_degree.insert(*tail);
-	    tail->out_degree.insert(*head);
-	 }
-	 return true;
+
+          head->in_degree.insert(*tail);
+          tail->out_degree.insert(*head);
+          return true;
       }
 
 
-      inline virtual bool RemoveEdge(size_t indexOfHead, size_t indexOfTail, 
-				     bool reverse = false)
+      inline virtual bool RemoveEdge(size_t indexOfHead, size_t indexOfTail)
       {
-	 assert(HasNode(indexOfHead));
-	 assert(HasNode(indexOfTail));
-	 if(reverse)
-	 {
-	    node_list[indexOfHead].out_degree.erase(indexOfTail);
-	    node_list[indexOfTail].in_degree.erase(indexOfTail);
-	 }
-	 else
-	 {
-	    node_list[indexOfHead].in_degree.erase(indexOfTail);
-	    node_list[indexOfTail].out_degree.erase(indexOfTail);
-	 }
-	 return true;
+          assert(HasNode(indexOfHead));
+          assert(HasNode(indexOfTail));
+
+          node_list[indexOfHead].in_degree.erase(indexOfTail);
+          node_list[indexOfTail].out_degree.erase(indexOfTail);
+
+          return true;
       }
 
 
-      inline virtual bool RemoveEdge(iterator& head, size_t indexOfTail,
-				     bool reverse = false)
+      inline virtual bool RemoveEdge(iterator head, size_t indexOfTail)
       {
-	 assert(HasNode(indexOfTail));
-	 if(reverse)
-	 {
-	    head->out_degree.erase(indexOfTail);
-	    node_list[indexOfTail].in_degree.erase(*head);
-	 }
-	 else
-	 {
-	    head->in_degree.erase(indexOfTail);
-	    node_list[indexOfTail].out_degree.erase(*head);
-	 }
-	 return true;
+          assert(HasNode(indexOfTail));
+
+          head->in_degree.erase(indexOfTail);
+          node_list[indexOfTail].out_degree.erase(*head);
+          return true;
       }
 
+      inline virtual bool RemoveEdge(iterator head, iterator tail)
+      {
+          head->in_degree.erase(*tail);
+          tail->out_degree.erase(*head);
+          return true;
+      }
+
+      inline virtual bool HasEdge(size_t indexOfHead, size_t indexOfTail)
+      {
+          assert(HasNode(indexOfHead));
+          assert(HasNode(indexOfTail));
+
+          if(node_list[indexOfHead].in_degree.find(indexOfTail) ==
+                  node_list[indexOfHead].in_degree.end())
+              return false;
+          else
+              return true;
+      }
       
-      inline virtual bool RemoveEdge(iterator& head, iterator& tail,
-				     bool reverse = false)
+      inline virtual bool HasEdge(iterator head, size_t indexOfTail)
       {
-	 if(reverse)
-	 {
-	    head->out_degree.erase(*tail);
-	    tail->in_degree.erase(*head);
-	 }
-	 else
-	 {
-	    head->in_degree.erase(*tail);
-	    tail->out_degree.erase(*head);
-	 }
-	 return true;
+          assert(HasNode(indexOfTail));
+
+          if(head->in_degree.find(indexOfTail) ==
+                  head->in_degree.end())
+              return false;
+          else
+              return true;
       }
 
-      inline virtual bool HasEdge(size_t indexOfHead, size_t indexOfTail, 
-			   bool reverse = false)
+      virtual bool HasEdge(iterator head, iterator tail)
       {
-	 assert(HasNode(indexOfHead));
-	 assert(HasNode(indexOfTail));
-	 if(reverse)
-	 {
-	    if(node_list[indexOfHead].out_degree.find(indexOfTail) ==
-	       node_list[indexOfHead].out_degree.end())
-	       return false;
-	    else
-	       return true;
-	 }
-	 else
-	 {
-	    if(node_list[indexOfHead].in_degree.find(indexOfTail) ==
-	       node_list[indexOfHead].in_degree.end())
-	       return false;
-	    else
-	       return true;
-	 }
-      }
-
-      
-      inline virtual bool HasEdge(iterator& head, size_t indexOfTail,
-			   bool reverse = false)
-      {
-	 assert(HasNode(indexOfTail));
-
-	 if(reverse)
-	 {
-	    if(head->out_degree.find(indexOfTail) == 
-	       head->out_degree.end())
-	       return false;
-	    else
-	       return true;
-	 }
-	 else
-	 {
-	    if(head->in_degree.find(indexOfTail) == 
-	       head->in_degree.end())
-	       return false;
-	    else
-	       return true;
-	 }
-      }
-
-      virtual bool HasEdge(iterator& head, iterator& tail, 
-			   bool reverse = false)
-      {
-	 if(reverse)
-	 {
-	    if(head->out_degree.find(*tail) ==
-	       head->out_degree.end())
-	       return false;
-	    else
-	       return true;
-	 }
-	 else
-	 {
-	    if(head->in_degree.find(*tail) ==
-	       head->in_degree.end())
-	       return false;
-	    else
-	       return true;
-	 }
+          if(head->in_degree.find(*tail) ==
+                  head->in_degree.end())
+              return false;
+          else
+              return true;
       }
    };
 };
