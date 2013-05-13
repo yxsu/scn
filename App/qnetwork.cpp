@@ -196,6 +196,7 @@ QRectF QEdgeItem::boundingRect() const
 
 void QEdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
+    QGraphicsItem::mouseDoubleClickEvent(event);
    isDashed = ! isDashed;
    /*
    QPen pen;
