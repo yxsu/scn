@@ -11,8 +11,7 @@ TEMPLATE = lib
 CONFIG += lib_bundle
 DEFINES += NETWORK_LIBRARY
 
-mac:QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
-else:QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
 
 SOURCES += \
     network_measurements.cpp \

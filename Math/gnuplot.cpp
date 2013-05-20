@@ -6,6 +6,11 @@ using namespace std;
 Gnuplot::Gnuplot()
 {
     result_base_path = "figure/";
+#ifdef Q_OS_MAC
+    gnuplot_path = "/usr/local/bin/gnuplot";
+#else
+    gnuplot_path = "gnuplot";
+#endif
 }
 
 string Gnuplot::DrawHistogram(vector<pair<double, size_t> > &data)
@@ -34,7 +39,7 @@ string Gnuplot::DrawHistogram(vector<pair<double, size_t> > &data)
     outfile<<"plot \""<<data_filename<<"\" notitle with boxes"<<endl;
     outfile.close();
     //execute
-    if(system(string("gnuplot " + command_filename).c_str()) == 0)
+    if(system(string(gnuplot_path + " " + command_filename).c_str()) == 0)
         return figure_filename;
     else
         return "";

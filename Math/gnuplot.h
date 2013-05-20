@@ -17,6 +17,7 @@ public:
 
 private:
     string result_base_path;
+    string gnuplot_path;
 
 };
 
