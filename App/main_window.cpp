@@ -63,6 +63,10 @@ void MainWindow::ComputeBasicInfo(scn::UGraph::pGraph graph)
         ui->lineEdit_clustering_coefficient->setText(tr("%1").arg(ruler.GetClusteringCoeff()));
     else
         ui->lineEdit_clustering_coefficient->clear();
+    //degree distribution
+    QImage image_degree_dist(QString::fromStdString(ruler.DrawDegreeDistribution()));
+    ui->label_image_degree_dist->setPixmap(
+                QPixmap::fromImage(image_degree_dist.scaledToWidth(ui->dockWidget_ruler->width(), Qt::SmoothTransformation)));
     //diameter and average distance
     if(ui->checkBox_diameter->isChecked() || ui->checkBox_average_distance->isChecked())
     {

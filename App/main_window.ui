@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1017</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -188,6 +188,29 @@
         <widget class="QLineEdit" name="lineEdit_average_distance"/>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_degree_dist">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Degree Distribution</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_image_degree_dist">
+       <property name="text">
+        <string>No Preview</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="verticalSpacer">

@@ -1,6 +1,7 @@
 #pragma once
 #include<network.hpp>
 #include<string>
+#include<ctime>
 #include<memory>
 #include<QColor>
 #include<QGraphicsItem>

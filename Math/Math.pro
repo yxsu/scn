@@ -18,7 +18,8 @@ SOURCES += \
     sym_matrix.cpp \
     sqr_matrix.cpp \
     matrix.cpp \
-    dwt_data.cpp
+    dwt_data.cpp \
+    gnuplot.cpp
 
 HEADERS += math.h\
         math_global.h \
@@ -26,7 +27,8 @@ HEADERS += math.h\
     sym_matrix.hpp \
     sqr_matrix.hpp \
     matrix.hpp \
-    fortran2c.hpp
+    fortran2c.hpp \
+    gnuplot.h
 
 unix:!symbian {
     maemo5 {

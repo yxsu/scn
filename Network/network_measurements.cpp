@@ -14,6 +14,7 @@
 #include <stack>
 #include <cstdlib>
 #include <ctime>
+#include <gnuplot.h>
 using namespace scn;
 using namespace std;
 
@@ -770,7 +771,7 @@ string scn::Ruler::DrawDegreeDistribution()
       distribution[node->GetDegree()]++;
    }
    //copy and sort
-   vector<pair<size_t, size_t>> pairs(distribution.begin(), distribution.end());
+   vector<pair<double, size_t>> pairs(distribution.begin(), distribution.end());
    sort(pairs.begin(), pairs.end(), [&](const pair<size_t, size_t> &one, 
 					const pair<size_t, size_t> &two)
 	{
@@ -778,18 +779,10 @@ string scn::Ruler::DrawDegreeDistribution()
 	      return true;
 	   else
 	      return false;
-	});
-   //save in text file
-   ofstream outfile("degree_distribution.txt");
-   outfile<<"degree     number of node"<<endl;
-   for(auto& i : pairs)
-   {
-      outfile<<i.first<<"    "<<i.second<<endl;
-   }
-   outfile.close();
+    });
    //draw
-   std::string filename = "degree_distribution_auto_generated";
-   return filename + ".png";
+   Gnuplot plot;
+   return plot.DrawHistogram(pairs);
 }
 
 Matrix scn::Ruler::GetGeodesicMatrix()
