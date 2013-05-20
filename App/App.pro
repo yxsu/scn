@@ -14,10 +14,12 @@ QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
         main_window.cpp \
-    qnetwork.cpp
+    qnetwork.cpp \
+    distance_computation.cpp
 
 HEADERS  += main_window.h \
-    qnetwork.hpp
+    qnetwork.hpp \
+    distance_computation.h
 
 FORMS    += main_window.ui
 

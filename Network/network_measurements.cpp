@@ -782,7 +782,7 @@ string scn::Ruler::DrawDegreeDistribution()
     });
    //draw
    Gnuplot plot;
-   return plot.DrawHistogram(pairs);
+   return plot.DrawHistogram(pairs, "degree_distribution");
 }
 
 Matrix scn::Ruler::GetGeodesicMatrix()

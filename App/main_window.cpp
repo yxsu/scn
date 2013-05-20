@@ -9,13 +9,23 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    distance_thread(parent)
 {
     ui->setupUi(this);
     //set property
     setWindowTitle(tr("Complex Network Analysis System"));
     showMaximized();
     statusBar()->showMessage(tr("Welcome to a complex network world!"));
+    //set connection
+    connect(&distance_thread, &DistanceComputation::HasResult,
+            [&](size_t diameter, double average_distance)
+    {
+        if(ui->checkBox_diameter->isChecked())
+            ui->lineEdit_diameter->setText(tr("%1").arg(diameter));
+        if(ui->checkBox_average_distance->isChecked())
+            ui->lineEdit_average_distance->setText(tr("%1").arg(average_distance));
+    });
 }
 
 MainWindow::~MainWindow()
@@ -68,19 +78,16 @@ void MainWindow::ComputeBasicInfo(scn::UGraph::pGraph graph)
     ui->label_image_degree_dist->setPixmap(
                 QPixmap::fromImage(image_degree_dist.scaledToWidth(ui->dockWidget_ruler->width(), Qt::SmoothTransformation)));
     //diameter and average distance
-    if(ui->checkBox_diameter->isChecked() || ui->checkBox_average_distance->isChecked())
-    {
-        auto distance = ruler.GetDiameterAndAverageDistance();
-        if(ui->checkBox_diameter->isChecked())
-            ui->lineEdit_diameter->setText(tr("%1").arg(distance.first));
-        if(ui->checkBox_average_distance->isChecked())
-            ui->lineEdit_average_distance->setText(tr("%1").arg(distance.second));
-    }
     if(!ui->checkBox_diameter->isChecked())
         ui->lineEdit_diameter->clear();
     if(!ui->checkBox_average_distance->isChecked())
         ui->lineEdit_average_distance->clear();
-
+    if(ui->checkBox_diameter->isChecked() || ui->checkBox_average_distance->isChecked())
+    {
+        ui->lineEdit_diameter->setText("Computing...");
+        ui->lineEdit_average_distance->setText("Computing...");
+        distance_thread.StartCompute(graph);
+    }
 }
 
 void MainWindow::on_action_open_net_file_triggered()

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <memory>
 #include "qnetwork.hpp"
+#include "distance_computation.h"
 
 namespace Ui {
 class MainWindow;
@@ -59,6 +60,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     std::shared_ptr<QUNetwork> unetwork;
+    DistanceComputation distance_thread;
 };
 
 #endif // MAIN_WINDOW_H

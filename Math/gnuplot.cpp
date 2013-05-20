@@ -13,14 +13,17 @@ Gnuplot::Gnuplot()
 #endif
 }
 
-string Gnuplot::DrawHistogram(vector<pair<double, size_t> > &data)
+string Gnuplot::DrawHistogram(vector<pair<double, size_t> > &data, string filename)
 {
     //get current time
     using namespace std::chrono;
     time_t date = chrono::system_clock::to_time_t(system_clock::now());
     //get filename
     stringstream ss;
-    ss<<"histogram_file_"<<date;
+    if(filename == "")
+        ss<<"histogram_file_"<<date;
+    else
+        ss<<filename;
     string data_filename = ss.str() + ".dat";
     string command_filename = ss.str() + ".gp";
     string figure_filename = ss.str() + ".png";
