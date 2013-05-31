@@ -2,6 +2,7 @@
 #include "ui_dialog_enhance_sync.h"
 #include <gnuplot.h>
 #include <QMessageBox>
+#include <fstream>
 
 DialogEnhanceSync::DialogEnhanceSync(QWidget *parent) :
     QDialog(parent),
@@ -18,6 +19,13 @@ DialogEnhanceSync::DialogEnhanceSync(QWidget *parent) :
     {
         this->graph = graph;
         QMessageBox::information(this, tr("Result"), tr("Optimizing process finished!"),QMessageBox::Ok);
+        //save ratio sequence to file
+        std::ofstream outfile("ratio_sequence.txt", ios_base::trunc);
+        for(auto iter : ratio_record)
+        {
+            outfile<<iter.first<<"   "<<iter.second<<endl;
+        }
+        outfile.close();
     });
 }
 
