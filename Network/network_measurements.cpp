@@ -18,6 +18,20 @@
 using namespace scn;
 using namespace std;
 
+bool Ruler::IsConnectedGraph()
+{
+    auto& distance = distance_sssp;
+    distance.clear();
+    RunSPFA(*graph->begin());
+
+    for(auto node = graph->begin(); node != graph->end(); node++)
+    {
+        if(distance[*node] == Graph::NaF)
+            return false;
+    }
+    return true;
+}
+
 double scn::Ruler::ComputeAverageDegree()
 {
    double sum = 0;

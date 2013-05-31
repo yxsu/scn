@@ -22,6 +22,8 @@ namespace scn
       ~Ruler(){}
    public://public operations
 
+      bool IsConnectedGraph();
+
       double ComputeAverageDegree();
 /**
  * @name ComputeSpectrum - compute the spectrum of the adjacency

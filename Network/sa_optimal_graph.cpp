@@ -45,7 +45,7 @@ scn::UGraph::pGraph SAOptimalGraph::GenNextGraph(scn::UGraph::pGraph current_gra
                 }
             }
         }
-    }while(!next_graph->IsConnectedGraph());
+    }while(!Ruler(next_graph).IsConnectedGraph());
     return next_graph;
 }
 
