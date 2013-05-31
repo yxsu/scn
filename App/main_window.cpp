@@ -1,5 +1,6 @@
 #include "main_window.h"
 #include "ui_main_window.h"
+#include "dialog_enhance_sync.h"
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -469,4 +470,20 @@ void MainWindow::on_action_tsd_sw_network_triggered()
     UGraph::pGraph graph = scn::GenTreeStructuredSW(times);
     unetwork.reset(new QUNetwork(graph));
     DrawAndCompute();
+}
+
+void MainWindow::on_action_stimulated_annealing_triggered()
+{
+    DialogEnhanceSync dialog(this);
+    if(unetwork)
+    {
+        dialog.SetInitialGraph(unetwork->GetTopology());
+        dialog.exec();
+        if(dialog.result() == QDialog::Accepted)
+        {
+            auto graph = dialog.GetFinalGraph();
+            unetwork.reset(new QUNetwork(graph));
+            DrawAndCompute();
+        }
+    }
 }

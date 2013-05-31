@@ -13,23 +13,13 @@ Gnuplot::Gnuplot()
 #endif
 }
 
-string Gnuplot::DrawHistogram(vector<pair<double, size_t> > &data, string filename)
+string Gnuplot::DrawHistogram()
 {
-    //get current time
-    using namespace std::chrono;
-    time_t date = chrono::system_clock::to_time_t(system_clock::now());
-    //get filename
-    stringstream ss;
-    if(filename == "")
-        ss<<"histogram_file_"<<date;
-    else
-        ss<<filename;
-    string data_filename = ss.str() + ".dat";
-    string command_filename = ss.str() + ".gp";
-    string figure_filename = ss.str() + ".png";
+    if(data_filename == "")
+            SetFileName();
     //write data
     ofstream out_data(data_filename, ios_base::trunc);
-    for(auto iter = data.begin(); iter != data.end(); iter++)
+    for(auto iter = data_xy.begin(); iter != data_xy.end(); iter++)
     {
         out_data<<iter->first<<"  "<<iter->second<<endl;
     }
@@ -46,4 +36,49 @@ string Gnuplot::DrawHistogram(vector<pair<double, size_t> > &data, string filena
         return figure_filename;
     else
         return "";
+}
+
+string Gnuplot::DrawXYCurve()
+{
+    if(data_filename == "")
+            SetFileName();
+    //write data
+    ofstream out_data(data_filename, ios_base::trunc);
+    for(auto iter = data_xy.begin(); iter != data_xy.end(); iter++)
+    {
+        out_data<<iter->first<<"  "<<iter->second<<endl;
+    }
+    out_data.close();
+    //write command
+    ofstream outfile(command_filename, ios_base::trunc);
+    outfile<<"set terminal png"<<endl;
+    outfile<<"set output \""<<figure_filename<<"\""<<endl;
+    outfile<<"plot \""<<data_filename<<"\" notitle with linespoints"<<endl;
+    outfile.close();
+    //execute
+    if(system(string(gnuplot_path + " " + command_filename).c_str()) == 0)
+        return figure_filename;
+    else
+        return "";
+}
+
+void Gnuplot::SetFileName(string filename)
+{
+    //get current time
+    using namespace std::chrono;
+    time_t date = chrono::system_clock::to_time_t(system_clock::now());
+    //get filename
+    stringstream ss;
+    if(filename == "")
+        ss<<"gnuplot_file_"<<date;
+    else
+        ss<<filename;
+    data_filename = ss.str() + ".dat";
+    command_filename = ss.str() + ".gp";
+    figure_filename = ss.str() + ".png";
+}
+
+void Gnuplot::SetXYData(vector<pair<double, double> > &data)
+{
+    this->data_xy = data;
 }

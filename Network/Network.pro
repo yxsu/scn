@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
+QT += core
 
 TARGET = Network
 TEMPLATE = lib
@@ -16,8 +17,9 @@ QMAKE_CXXFLAGS += -std=c++11
 SOURCES += \
     network_measurements.cpp \
     network_generator.cpp \
-    network_apps.cpp \
-    graph_io.cpp
+    graph_io.cpp \
+    network_random_walk.cpp \
+    sa_optimal_graph.cpp
 
 HEADERS += network.h\
         network_global.h \
@@ -26,7 +28,8 @@ HEADERS += network.h\
     graph.hpp \
     network_measurements.hpp \
     network_generator.hpp \
-    network_apps.hpp
+    network_random_walk.hpp \
+    sa_optimal_graph.h
 
 unix:!symbian {
     maemo5 {

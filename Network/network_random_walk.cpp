@@ -1,4 +1,4 @@
-#include "network_apps.hpp"
+#include "network_random_walk.hpp"
 #include<algorithm>
 #include<cstdlib>
 #include<stack>

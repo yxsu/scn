@@ -16,14 +16,17 @@ SOURCES += main.cpp\
         main_window.cpp \
     qnetwork.cpp \
     distance_computation.cpp \
-    lambda_computation.cpp
+    lambda_computation.cpp \
+    dialog_enhance_sync.cpp
 
 HEADERS  += main_window.h \
     qnetwork.hpp \
     distance_computation.h \
-    lambda_computation.h
+    lambda_computation.h \
+    dialog_enhance_sync.h
 
-FORMS    += main_window.ui
+FORMS    += main_window.ui \
+    dialog_enhance_sync.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Network/release/ -lNetwork
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Network/debug/ -lNetwork

@@ -81,6 +81,23 @@ Matrix Matrix::operator*(const Matrix &other) const
    return result;
 }
 
+bool Matrix::HasNoZeros()
+{
+    for(auto iter : vdata)
+    {
+        if(iter == 0)
+            return false;
+    }
+    return true;
+}
+
+Matrix& Matrix::operator+=(const Matrix &other)
+{
+    assert(IsSameSizeWith(other));
+    vdata[slice(0, vdata.size(), 1)] += other.vdata[slice(0, vdata.size(), 1)];
+    return *this;
+}
+
 Matrix& Matrix::operator=(const Matrix &other)
 {
    width = other.GetWidth();

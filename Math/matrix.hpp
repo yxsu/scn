@@ -113,6 +113,8 @@ public://operator overload
 
    Matrix& operator /=(double value);
 
+   Matrix& operator +=(const Matrix &other);
+
 public://public basic operation
 /**
  * @name row - get the reference of a row in this matrix
@@ -172,6 +174,9 @@ public://public basic operation
  * @return bool
  */
    bool IsSameSizeWith(const Matrix &other) const;
+
+   bool HasNoZeros();
+
 public://advanced functions
 /**
  * @name FilterByValid - symmetric filtering

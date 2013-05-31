@@ -58,6 +58,8 @@ private slots:
 
     void on_action_tsd_sw_network_triggered();
 
+    void on_action_stimulated_annealing_triggered();
+
 private:
     Ui::MainWindow *ui;
     std::shared_ptr<QUNetwork> unetwork;

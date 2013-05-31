@@ -56,8 +56,21 @@
     <addaction name="action_tsd_sfsw_network"/>
     <addaction name="action_tsd_sw_network"/>
    </widget>
+   <widget class="QMenu" name="menuSynchronize">
+    <property name="title">
+     <string>Synchronize</string>
+    </property>
+    <widget class="QMenu" name="menuEnhance_Synchronizability">
+     <property name="title">
+      <string>Enhance Synchronizability</string>
+     </property>
+     <addaction name="action_stimulated_annealing"/>
+    </widget>
+    <addaction name="menuEnhance_Synchronizability"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_create_network"/>
+   <addaction name="menuSynchronize"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -344,6 +357,11 @@
    </property>
    <property name="whatsThis">
     <string>Create a Tree-Structured Deterministic Small World Network</string>
+   </property>
+  </action>
+  <action name="action_stimulated_annealing">
+   <property name="text">
+    <string>Stimulated Annealing</string>
    </property>
   </action>
  </widget>

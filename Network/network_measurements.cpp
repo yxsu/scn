@@ -40,7 +40,6 @@ std::pair<double, double> scn::Ruler::GetLambda2AndRatio()
    return make_pair(list[list.size() - 2], list[0] / list[list.size() - 2]);
 }
 
-
 Map<double> scn::Ruler::ComputeSpectralDensity(double slide)
 {
    auto lambdas = ComputeSpectrum();
@@ -771,7 +770,7 @@ string scn::Ruler::DrawDegreeDistribution()
       distribution[node->GetDegree()]++;
    }
    //copy and sort
-   vector<pair<double, size_t>> pairs(distribution.begin(), distribution.end());
+   vector<pair<double, double>> pairs(distribution.begin(), distribution.end());
    sort(pairs.begin(), pairs.end(), [&](const pair<size_t, size_t> &one, 
 					const pair<size_t, size_t> &two)
 	{
@@ -782,7 +781,9 @@ string scn::Ruler::DrawDegreeDistribution()
     });
    //draw
    Gnuplot plot;
-   return plot.DrawHistogram(pairs, "degree_distribution");
+   plot.SetXYData(pairs);
+   plot.SetFileName("degree_distribution");
+   return plot.DrawHistogram();
 }
 
 Matrix scn::Ruler::GetGeodesicMatrix()

@@ -571,6 +571,28 @@ namespace scn //short for Su' Complex Networks
 	 }
 	 return matrix;
       }
+
+      bool IsConnectedGraph()
+      {
+          auto adj_matrix = GetAdjacencyMatrix();
+          size_t size = adj_matrix.GetWidth();
+          Matrix temp_matrix(size, size);
+          for(size_t i = 0; i < size; i++)
+          {
+              temp_matrix.col(i) = 0;
+          }
+          Matrix power_matrix(adj_matrix);
+
+          for(size_t i = 1; i < size; i++)
+          {
+              temp_matrix += power_matrix;
+              power_matrix = power_matrix * adj_matrix;
+          }
+          if(temp_matrix.HasNoZeros())
+              return true;
+          else
+              return false;
+      }
    };
 
 //////////////////////////////////////////////////////////////
