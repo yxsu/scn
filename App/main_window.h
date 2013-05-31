@@ -5,6 +5,7 @@
 #include <memory>
 #include "qnetwork.hpp"
 #include "distance_computation.h"
+#include "lambda_computation.h"
 
 namespace Ui {
 class MainWindow;
@@ -61,6 +62,7 @@ private:
     Ui::MainWindow *ui;
     std::shared_ptr<QUNetwork> unetwork;
     DistanceComputation distance_thread;
+    LambdaComputation lambda_thread;
 };
 
 #endif // MAIN_WINDOW_H

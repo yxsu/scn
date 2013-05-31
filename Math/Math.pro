@@ -38,3 +38,7 @@ unix:!symbian {
     }
     INSTALLS += target
 }
+
+unix|win32: LIBS += -llapack
+
+unix|win32: LIBS += -lblas

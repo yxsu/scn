@@ -100,6 +100,7 @@ Matrix& Matrix::operator=(Matrix &&other) noexcept
 Matrix& Matrix::operator=(double value)
 {
    vdata = value;
+   return *this;
 }
 
 slice_array<double> Matrix::row(size_t indexOfRow)
@@ -223,10 +224,10 @@ valarray<double> Matrix::GetEigenvalueList()
    vector<double> work(26 * n);//workspace
    vector<int> iwork(10 * n);//workspace
    //query the optimal size
-   /*
+
    dsyevr_(&jobz, &range, &uplo, &n, data.data(), &lda, &vl, &vu, &il, &iu, &abstol,
 	   &m, w.data(), z.data(), &ldz, isuppz.data(), work.data(), &lwork,
-       iwork.data(), &liwork, &info);*/
+       iwork.data(), &liwork, &info);
    if(info == 0)
    {//succeed
       lwork = ceil(work[0]);
@@ -240,9 +241,9 @@ valarray<double> Matrix::GetEigenvalueList()
       return valarray<double>();
    }
    //compute
-  /* dsyevr_(&jobz, &range, &uplo, &n, data.data(), &lda, &vl, &vu, &il, &iu, &abstol,
+   dsyevr_(&jobz, &range, &uplo, &n, data.data(), &lda, &vl, &vu, &il, &iu, &abstol,
 	   &m, w.data(), z.data(), &ldz, isuppz.data(), work.data(), &lwork,
-       iwork.data(), &liwork, &info);*/
+       iwork.data(), &liwork, &info);
    if(info == 0)
    {
       valarray<double> result(n);
@@ -279,9 +280,9 @@ Matrix::ValueVectorList Matrix::GetEigenValueAndVector() const
    vector<double> work(26 * n);//workspace
    vector<int> iwork(10 * n);//workspace
    //query the optimal size
- /*  dsyevr_(&jobz, &range, &uplo, &n, data.data(), &lda, &vl, &vu, &il, &iu, &abstol,
+   dsyevr_(&jobz, &range, &uplo, &n, data.data(), &lda, &vl, &vu, &il, &iu, &abstol,
 	   &m, w.data(), z.data(), &ldz, isuppz.data(), work.data(), &lwork,
-       iwork.data(), &liwork, &info);*/
+       iwork.data(), &liwork, &info);
    if(info == 0)
    {//succeed
       lwork = ceil(work[0]);
@@ -295,10 +296,10 @@ Matrix::ValueVectorList Matrix::GetEigenValueAndVector() const
       return ValueVectorList();
    }
    //compute
-   /*
+
    dsyevr_(&jobz, &range, &uplo, &n, data.data(), &lda, &vl, &vu, &il, &iu, &abstol,
 	   &m, w.data(), z.data(), &ldz, isuppz.data(), work.data(), &lwork,
-       iwork.data(), &liwork, &info);*/
+       iwork.data(), &liwork, &info);
    if(info == 0)
    {
       ValueVectorList result;

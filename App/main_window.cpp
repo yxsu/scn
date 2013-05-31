@@ -10,7 +10,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    distance_thread(parent)
+    distance_thread(parent),
+    lambda_thread(parent)
 {
     ui->setupUi(this);
     //set property
@@ -25,6 +26,14 @@ MainWindow::MainWindow(QWidget *parent) :
             ui->lineEdit_diameter->setText(tr("%1").arg(diameter));
         if(ui->checkBox_average_distance->isChecked())
             ui->lineEdit_average_distance->setText(tr("%1").arg(average_distance));
+    });
+    connect(&lambda_thread, &LambdaComputation::HasResult,
+            [&](double lambda2, double lambda_ratio)
+    {
+        if(ui->checkBox_lambda2->isChecked())
+            ui->lineEdit_lambda2->setText(tr("%1").arg(lambda2));
+        if(ui->checkBox_lambda_ratio->isChecked())
+            ui->lineEdit_lambda_ratio->setText(tr("%1").arg(lambda_ratio));
     });
 }
 
@@ -87,6 +96,17 @@ void MainWindow::ComputeBasicInfo(scn::UGraph::pGraph graph)
         ui->lineEdit_diameter->setText("Computing...");
         ui->lineEdit_average_distance->setText("Computing...");
         distance_thread.StartCompute(graph);
+    }
+    //lambda
+    if(!ui->checkBox_lambda2->isChecked())
+        ui->lineEdit_lambda2->clear();
+    if(!ui->checkBox_lambda_ratio->isChecked())
+        ui->lineEdit_lambda_ratio->clear();
+    if(ui->checkBox_lambda2->isChecked() || ui->checkBox_lambda_ratio->isChecked())
+    {
+        ui->lineEdit_lambda2->setText("Computing...");
+        ui->lineEdit_lambda_ratio->setText("Computing...");
+        lambda_thread.StartCompute(graph);
     }
 }
 
