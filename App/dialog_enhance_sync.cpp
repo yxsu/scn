@@ -101,3 +101,13 @@ void DialogEnhanceSync::update_ratio(double progress, double ratio, double cc, d
                                        ui->label_average_distance_graph->height(),
                                        Qt::SmoothTransformation)));
 }
+
+void DialogEnhanceSync::on_buttonBox_accepted()
+{
+
+}
+
+void DialogEnhanceSync::on_buttonBox_rejected()
+{
+
+}

@@ -26,6 +26,11 @@ public slots:
 
     void update_ratio(double progress, double ratio, double cc, double diameter, double average_distance);
 
+private slots:
+    void on_buttonBox_accepted();
+
+    void on_buttonBox_rejected();
+
 private:
     Ui::DialogEnhanceSync *ui;
     scn::UGraph::pGraph graph;
