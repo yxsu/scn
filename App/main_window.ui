@@ -179,7 +179,7 @@
           <string>Diameter</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -195,6 +195,9 @@
          <property name="text">
           <string>Average Distance</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -209,6 +212,9 @@
          <property name="text">
           <string>Lambda2</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -222,6 +228,9 @@
         <widget class="QCheckBox" name="checkBox_lambda_ratio">
          <property name="text">
           <string>Lambda Ratio</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

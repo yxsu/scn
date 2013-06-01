@@ -386,7 +386,6 @@ namespace scn //short for Su' Complex Networks
       UGraph(size_t numberOfNodes):Graph(numberOfNodes){}
 
       UGraph(UGraph &other)
-          :Graph(other)
       {
 	 //add node
 	 for(auto node = other.begin(); node != other.end(); node++)

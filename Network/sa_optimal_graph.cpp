@@ -5,7 +5,7 @@ using namespace scn;
 using namespace std;
 SAOptimalGraph::SAOptimalGraph(QObject* parent):
     QThread(parent),
-    T_min(0.0001), T(0.85), r(0.98)
+    T_min(0.001), T(0.85), r(0.98)
 {
 }
 
@@ -17,6 +17,30 @@ scn::UGraph::pGraph SAOptimalGraph::GenNextGraph(scn::UGraph::pGraph current_gra
 {
     UGraph::pGraph next_graph;
     srand(size_t(time(NULL)));
+/*
+    do
+    {
+        size_t size = current_graph->GetNumberOfNodes();
+        size_t index[4];
+        do
+        {
+            index[0] = rand() % size;
+            index[1] = rand() % size;//edge1: (index[0], index[1])
+            index[2] = rand() % size;
+            index[3] = rand() % size;//edge2: (index[2], index[3])
+            if(index[0] == index[1] || index[2] == index[3])
+                continue;
+            if(current_graph->HasEdge(index[0], index[1]) && !current_graph->HasEdge(index[2], index[3]))
+                break;
+        }while(true);
+
+        //remove edge1 and add edge2
+        next_graph.reset(new UGraph(*current_graph));
+        next_graph->RemoveEdge(index[0], index[1]);
+        next_graph->AddEdge(index[2], index[3]);
+
+    }while(!Ruler(next_graph).IsConnectedGraph());
+    */
 
     do
     {
@@ -46,6 +70,7 @@ scn::UGraph::pGraph SAOptimalGraph::GenNextGraph(scn::UGraph::pGraph current_gra
             }
         }
     }while(!Ruler(next_graph).IsConnectedGraph());
+
     return next_graph;
 }
 
@@ -72,6 +97,7 @@ void SAOptimalGraph::run()
     T = 0.85;
     auto current_graph = graph;
     srand(size_t(time(NULL)));
+    int times = 0;
     do
     {
         auto next_graph = GenNextGraph(current_graph);
@@ -87,7 +113,11 @@ void SAOptimalGraph::run()
                 current_graph = next_graph;
         }
         T = r * T;
-        emit UpdateRatio(ratio_next_graph, T);
+        //compute measurement
+        Ruler ruler(current_graph);
+        auto distance = ruler.GetDiameterAndAverageDistance();
+        emit UpdateRatio(double(times++), ratio_next_graph, ruler.GetClusteringCoeff(),
+                         double(distance.first), distance.second);
 
     }while(T > T_min);
     emit OptimalGraph(current_graph);

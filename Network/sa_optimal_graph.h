@@ -15,7 +15,8 @@ public:
     void StartCompute(scn::UGraph::pGraph graph);
 
 signals:
-    void UpdateRatio(double lambda_ratio, double T);
+    void UpdateRatio(double iteration_times, double lambda_ratio, double clustering_coefficient,
+                     double diameter, double average_distance);
     void OptimalGraph(scn::UGraph::pGraph graph);
 public slots:
 

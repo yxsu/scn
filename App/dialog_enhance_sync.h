@@ -24,13 +24,16 @@ public:
 public slots:
     void on_pushButton_begin_clicked();
 
-    void update_ratio(double ratio, double progress);
+    void update_ratio(double progress, double ratio, double cc, double diameter, double average_distance);
 
 private:
     Ui::DialogEnhanceSync *ui;
     scn::UGraph::pGraph graph;
     SAOptimalGraph optimize_thread;
     vector<pair<double, double>> ratio_record;//pair<progress, ratio>
+    vector<pair<double, double>> cc_record;//clustering coefficient
+    vector<pair<double, double>> diameter_record;
+    vector<pair<double, double>> average_distance_record;
 };
 
 #endif // DIALOG_ENHANCE_SYNC_H
