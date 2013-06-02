@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>880</width>
-    <height>827</height>
+    <width>686</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,8 +35,8 @@
             <widget class="QLabel" name="label_lambda_ratio_graph">
              <property name="minimumSize">
               <size>
-               <width>400</width>
-               <height>300</height>
+               <width>300</width>
+               <height>200</height>
               </size>
              </property>
              <property name="text">
@@ -73,8 +73,8 @@
             <widget class="QLabel" name="label_clustering_coefficient_graph">
              <property name="minimumSize">
               <size>
-               <width>400</width>
-               <height>300</height>
+               <width>300</width>
+               <height>200</height>
               </size>
              </property>
              <property name="text">
@@ -112,8 +112,8 @@
             <widget class="QLabel" name="label_diameter_graph">
              <property name="minimumSize">
               <size>
-               <width>400</width>
-               <height>300</height>
+               <width>300</width>
+               <height>200</height>
               </size>
              </property>
              <property name="text">
@@ -147,8 +147,8 @@
             <widget class="QLabel" name="label_average_distance_graph">
              <property name="minimumSize">
               <size>
-               <width>400</width>
-               <height>300</height>
+               <width>300</width>
+               <height>200</height>
               </size>
              </property>
              <property name="text">

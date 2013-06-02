@@ -98,19 +98,24 @@ void SAOptimalGraph::run()
     auto current_graph = graph;
     srand(size_t(time(NULL)));
     int times = 0;
+    double current_ratio = Ruler(current_graph).GetLambda2AndRatio().second;
     do
     {
         auto next_graph = GenNextGraph(current_graph);
         double ratio_next_graph = Ruler(next_graph).GetLambda2AndRatio().second;
-        double dE = ratio_next_graph - Ruler(current_graph).GetLambda2AndRatio().second;
+        double dE = ratio_next_graph - current_ratio;
         if(dE <= 0)
         {
             current_graph = next_graph;
+            current_ratio = ratio_next_graph;
         }
         else
         {
             if(exp(dE / T) < double(rand() % 10) / 10)
+            {
                 current_graph = next_graph;
+                current_ratio = ratio_next_graph;
+            }
         }
         T = r * T;
         //compute measurement
