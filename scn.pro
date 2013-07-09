@@ -3,4 +3,5 @@ TEMPLATE = subdirs
 SUBDIRS += \
     App \
     Network \
-    Math
+    Math \
+    LBSN
