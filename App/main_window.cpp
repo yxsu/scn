@@ -499,7 +499,9 @@ void MainWindow::on_actionSetup_Data_Source_triggered()
         foursquare.SetPathOfDatabase("");
     }
     else
+    {
         foursquare.SetPathOfDatabase(filename);
+    }
 
     file.close();
 }

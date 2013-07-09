@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <memory>
-#include <foursquare.h>
+#include <foursquare.hpp>
 #include "qnetwork.hpp"
 #include "distance_computation.h"
 #include "lambda_computation.h"
