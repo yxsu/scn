@@ -18,7 +18,7 @@ SOURCES += \
 
 HEADERS +=\
         lbsn_global.h \
-    foursquare.h
+    foursquare.hpp \
 
 unix:!symbian {
     maemo5 {
@@ -28,3 +28,11 @@ unix:!symbian {
     }
     INSTALLS += target
 }
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Network/release/ -lNetwork
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Network/debug/ -lNetwork
+else:mac: LIBS += -F$$OUT_PWD/../Network/ -framework Network
+else:unix: LIBS += -L$$OUT_PWD/../Network/ -lNetwork
+
+INCLUDEPATH += $$PWD/../Network
+DEPENDPATH += $$PWD/../Network

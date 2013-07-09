@@ -487,3 +487,19 @@ void MainWindow::on_action_stimulated_annealing_triggered()
         }
     }
 }
+
+void MainWindow::on_actionSetup_Data_Source_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open Check-in file of Foursquare"), "",
+                                                    tr("Foursquare Files(*.txt)"));
+    QFile file(filename);
+    if(filename.isNull() || !file.open(QFile::ReadOnly))
+    {
+        QMessageBox::critical(this, tr("Error!"), tr("Could not open file!"));
+        foursquare.SetPathOfDatabase("");
+    }
+    else
+        foursquare.SetPathOfDatabase(filename);
+
+    file.close();
+}

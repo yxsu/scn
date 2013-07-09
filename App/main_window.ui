@@ -68,9 +68,23 @@
     </widget>
     <addaction name="menuEnhance_Synchronizability"/>
    </widget>
+   <widget class="QMenu" name="menuLocation_Based_Social_Network">
+    <property name="title">
+     <string>Location-Based Social Network</string>
+    </property>
+    <widget class="QMenu" name="menuFoursquare">
+     <property name="title">
+      <string>Foursquare</string>
+     </property>
+     <addaction name="actionSetup_Data_Source"/>
+     <addaction name="actionCreate_Venue_Network"/>
+    </widget>
+    <addaction name="menuFoursquare"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_create_network"/>
    <addaction name="menuSynchronize"/>
+   <addaction name="menuLocation_Based_Social_Network"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -371,6 +385,16 @@
   <action name="action_stimulated_annealing">
    <property name="text">
     <string>Stimulated Annealing</string>
+   </property>
+  </action>
+  <action name="actionSetup_Data_Source">
+   <property name="text">
+    <string>Setup Data Source</string>
+   </property>
+  </action>
+  <action name="actionCreate_Venue_Network">
+   <property name="text">
+    <string>Create Venue Network</string>
    </property>
   </action>
  </widget>

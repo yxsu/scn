@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <memory>
+#include <foursquare.h>
 #include "qnetwork.hpp"
 #include "distance_computation.h"
 #include "lambda_computation.h"
@@ -60,11 +61,14 @@ private slots:
 
     void on_action_stimulated_annealing_triggered();
 
+    void on_actionSetup_Data_Source_triggered();
+
 private:
     Ui::MainWindow *ui;
     std::shared_ptr<QUNetwork> unetwork;
     DistanceComputation distance_thread;
     LambdaComputation lambda_thread;
+    Foursquare foursquare;
 };
 
 #endif // MAIN_WINDOW_H

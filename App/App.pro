@@ -43,3 +43,11 @@ else:unix: LIBS += -L$$OUT_PWD/../Math/ -lMath
 
 INCLUDEPATH += $$PWD/../Math
 DEPENDPATH += $$PWD/../Math
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../LBSN/release/ -lLBSN
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../LBSN/debug/ -lLBSN
+else:mac: LIBS += -F$$OUT_PWD/../LBSN/ -framework LBSN
+else:unix: LIBS += -L$$OUT_PWD/../LBSN/ -lLBSN
+
+INCLUDEPATH += $$PWD/../LBSN
+DEPENDPATH += $$PWD/../LBSN
