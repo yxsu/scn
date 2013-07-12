@@ -4,4 +4,5 @@ SUBDIRS += \
     App \
     Network \
     Math \
-    LBSN
+    LBSN \
+    Crawler
