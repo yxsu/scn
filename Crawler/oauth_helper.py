@@ -1,5 +1,18 @@
 import urllib
 import random
+import time
+import urlparse
+import hmac
+import binascii
+
+def generate_nonce(length = 32):
+    """generate a string of pseudorandom number"""
+    return ''.join([str(random.randint(0, 9)) for i in range(length)])
+
+def escape(s):
+    """Escape a URL including any /."""
+    return urllib.quote(s, safe='~')
+
 
 class Consumer(object):
     """A consumer of OAuth-protected services.
@@ -145,6 +158,20 @@ class Token(object):
         return self.to_string()
 
 
+def setter(attr):
+    name = attr.__name__
+
+    def getter(self):
+        try:
+            return self.__dict__[name]
+        except KeyError:
+            raise AttributeError(name)
+
+    def deleter(self):
+        del self.__dict__[name]
+
+    return property(getter, attr, deleter)
+
 
 class Request(dict):
 
@@ -158,11 +185,7 @@ class Request(dict):
 
     """
 
-    http_method = HTTP_METHOD
-    http_url = None
-    version = VERSION
-
-    def __init__(self, method=HTTP_METHOD, url=None, parameters=None):
+    def __init__(self, method='GET', url=None, parameters=None):
         if method is not None:
             self.method = method
 
@@ -306,7 +329,7 @@ class Request(dict):
 
     @classmethod
     def from_consumer_and_token(cls, consumer, token=None,
-            http_method=HTTP_METHOD, http_url=None, parameters=None):
+            http_method='GET', http_url=None, parameters=None):
         if not parameters:
             parameters = {}
 
@@ -327,7 +350,7 @@ class Request(dict):
 
     @classmethod
     def from_token_and_callback(cls, token, callback=None,
-        http_method=HTTP_METHOD, http_url=None, parameters=None):
+        http_method='GET', http_url=None, parameters=None):
 
         if not parameters:
             parameters = {}
@@ -375,7 +398,7 @@ class Server(object):
     """
 
     timestamp_threshold = 300 # In seconds, five minutes.
-    version = VERSION
+    version = '1.0'
     signature_methods = None
 
     def __init__(self, signature_methods=None):
