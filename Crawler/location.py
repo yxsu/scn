@@ -6,33 +6,40 @@ import pycurl
 import random
 
 
-try:
-    from urlparse import parse_qs, parse_qsl
-except ImportError:
-    from cgi import parse_qs, parse_qsl
+#try:
+#    from urlparse import parse_qs, parse_qsl
+#except ImportError:
+#    from cgi import parse_qs, parse_qsl
 
+class FetchLocation:
+    twitter_url = 'https://stream.twitter.com/1.1/statuses/filter.json'
+    consumer_key = 'YXZm2FQ8mqkxDMKUOpKPpg'
+    consumer_secret = 'QYr5cv2HWBRyEFlv55Lp40niY1dOxBOqqmSsOaOCY'
+    access_token_key = '142674868-I1yPvLuTAupXc17AB8bDA8GbbnBwdXNgCwytSZmp'
+    access_token_secret = '4LRwgGwRtLZUpDvA60kTlwge6kYmoZpLfKKPtiFo'
 
-twitter_url = 'https://stream.twitter.com/1.1/statuses/filter.json'
-consumer_key = 'YXZm2FQ8mqkxDMKUOpKPpg'
-consumer_secret = 'QYr5cv2HWBRyEFlv55Lp40niY1dOxBOqqmSsOaOCY'
-access_token_key = '142674868-I1yPvLuTAupXc17AB8bDA8GbbnBwdXNgCwytSZmp'
-access_token_secret = '4LRwgGwRtLZUpDvA60kTlwge6kYmoZpLfKKPtiFo'
+    def __init__(self):
+        #set parameter
+        self.parameter = {
+            'oauth_version' : "1.0",
+            'oauth_nonce' : generate_nonce(),
+            'oauth_timestamp' : int(time.time()),
+            'oauth_token' : access_token_key,
+            'oauth_consumer_key' : consumer_key,
+            'stall_warnings' : 'true'}
+        #create client
+        self.consumer = Consumer(self.consumer_key, self.consumer_secret)
+        self.access_token = Token(self.access_token_key, self.access_token_secret)
 
-#set properties
-parameter = {
-    'oauth_version' : "1.0",
-    'oauth_nonce' : generate_nonce(),
-    'oauth_timestamp' : int(time.time()),
-    'oauth_token' : access_token_key,
-    'oauth_consumer_key' : consumer_key,
-    'stall_warnings' : 'true'}
+        def SetSearchRegion(self, coordinate_low, coordinate_high):
+            """set the location box for searching. coordinate=[longitude, latitude]"""
+            self.parameter['locations'] = str(coordinate_low[0]) + ', ' + str(coordinate_low[1]) +', '
+            + str(coordinate_high[0]) +', ' + str(coordinate_high[1])
+            values = {'locations' : self.parameter['locations'], 'stall_warnings' : 'true'}
+            self.post_data = urllib.urlencode(values)
 
-consumer = Consumer(consumer_key, consumer_secret)
-access_token = Token(access_token_key, access_token_secret)
-
-parameter['locations'] = '-74.98, 39.77, -72.98, 41.77'
-values = {'locations' : '-74.98, 39.77, -72.98, 41.77', 'stall_warnings' : 'true'}
-post_data = urllib.urlencode(values)
+        def LocationCallBack(self, buffer):
+            
 
 request = Request("POST", twitter_url, parameter)
 request.sign_request(SignatureMethod_HMAC_SHA1(), consumer, access_token)
