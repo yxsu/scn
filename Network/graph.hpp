@@ -38,7 +38,6 @@ namespace scn //short for Su' Complex Networks
    typedef std::vector<std::shared_ptr<UGraph>> UGraphList;
    typedef std::shared_ptr<UGraphList>          pUGraphList; 
 
-   typedef unsigned long long int               uint64;
 //************************************************************
 //Definition of Graphs
 //************************************************************

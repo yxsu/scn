@@ -115,7 +115,7 @@ namespace scn
       typename GraphType::pGraph graph;
       std::unordered_map<size_t, std::array<double, 3>> position;
       std::unordered_map<size_t, pNode> node_data;
-      std::unordered_map<scn::uint64, pEdge> edge_data;
+      std::unordered_map<quint64, pEdge> edge_data;
    };
 
 
@@ -150,15 +150,15 @@ namespace scn
 	 assert(*head <= 0xffffffff);
 	 assert(indexOfTail <= 0xffffffff);
 	 assert(graph->HasNode(indexOfTail));
-	 uint64 index;
+     quint64 index;
 	 if(*head < indexOfTail)
 	 {
-        index = uint64(*head) << 32;
+        index = quint64(*head) << 32;
 	    edge_data[index + indexOfTail] = data;
 	 }
 	 else
 	 {
-        index = uint64(indexOfTail) << 32;
+        index = quint64(indexOfTail) << 32;
 	    edge_data[index + *head] = data;
 	 }
       }
@@ -171,15 +171,15 @@ namespace scn
 	 assert(graph->HasNode(indexOfHead));
 	 assert(graph->HasNode(indexOfTail));
 
-	 uint64 index;
+     quint64 index;
 	 if(indexOfHead < indexOfTail)
 	 {
-        index = uint64(indexOfHead) << 32;
+        index = quint64(indexOfHead) << 32;
 	    edge_data[index + indexOfTail] = data;
 	 }
 	 else
 	 {
-        index = uint64(indexOfTail) << 32;
+        index = quint64(indexOfTail) << 32;
 	    edge_data[index + indexOfHead] = data;
 	 }
       }
@@ -189,34 +189,34 @@ namespace scn
 	 assert(*head <= 0xffffffff);
 	 assert(indexOfTail <= 0xffffffff);
 	 assert(graph->HasNode(indexOfTail));
-	 uint64 index;
+     quint64 index;
 	 if(*head < indexOfTail)
 	 {
-        index = uint64(*head) << 32;
+        index = quint64(*head) << 32;
 	    return edge_data[index + indexOfTail];
 	 }
 	 else
 	 {
-        index = uint64(indexOfTail) << 32;
+        index = quint64(indexOfTail) << 32;
 	    return edge_data[index + *head];
 	 }
       }
 
       virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail)
       {
-	 assert(indexOfHead <= 0xffffffff);
+     assert(indexOfHead <= 0xffffffff);
 	 assert(indexOfTail <= 0xffffffff);
 	 assert(graph->HasNode(indexOfHead));
 	 assert(graph->HasNode(indexOfTail));
-	 uint64 index;
+     quint64 index;
 	 if(indexOfHead < indexOfTail)
 	 {
-        index = uint64(indexOfHead) << 32;
+        index = quint64(indexOfHead) << 32;
 	    return edge_data[index + indexOfTail];
 	 }
 	 else
 	 {
-        index = uint64(indexOfTail) << 32;
+        index = quint64(indexOfTail) << 32;
 	    return edge_data[index + indexOfHead];
 	 }
       }
@@ -258,9 +258,9 @@ namespace scn
           assert(*head <= 0xffffffff);
           assert(indexOfTail <= 0xffffffff);
           assert(graph->HasNode(indexOfTail));
-          uint64 index;
+          quint64 index;
 
-          index = uint64(indexOfTail) << 32;
+          index = quint64(indexOfTail) << 32;
           edge_data[index + *head] = data;
       }
 
@@ -272,8 +272,8 @@ namespace scn
           assert(graph->HasNode(indexOfHead));
           assert(graph->HasNode(indexOfTail));
 
-          uint64 index;
-          index = uint64(indexOfTail) << 32;
+          quint64 index;
+          index = quint64(indexOfTail) << 32;
           edge_data[index + indexOfHead] = data;
       }
       
@@ -282,9 +282,9 @@ namespace scn
           assert(*head <= 0xffffffff);
           assert(indexOfTail <= 0xffffffff);
           assert(graph->HasNode(indexOfTail));
-          uint64 index;
+          quint64 index;
 
-          index = uint64(indexOfTail) << 32;
+          index = quint64(indexOfTail) << 32;
           return edge_data[index + *head];
       }
 
@@ -294,8 +294,8 @@ namespace scn
           assert(indexOfTail <= 0xffffffff);
           assert(graph->HasNode(indexOfHead));
           assert(graph->HasNode(indexOfTail));
-          uint64 index;
-          index = uint64(indexOfTail) << 32;
+          quint64 index;
+          index = quint64(indexOfTail) << 32;
           return edge_data[index + indexOfHead];
       }
 
