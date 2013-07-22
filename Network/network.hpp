@@ -49,7 +49,7 @@ namespace scn
 	 return node_data[*node];
       }
 
-     virtual pNode GetNodeData(size_t indexOfNode)
+     virtual pNode& GetNodeData(size_t indexOfNode)
       {
 	 assert(graph->HasNode(indexOfNode));
 	 return node_data[indexOfNode];

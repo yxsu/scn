@@ -72,9 +72,13 @@ void QEdgeItem::UpdatePosition(QPointF &&head, QPointF &&tail)
     update(boundingRect());
 }
 
+QUNetwork::QUNetwork()
+    :QNetwork<UGraph>()
+{
+}
+
 QUNetwork::QUNetwork(UGraph::pGraph &graph)
-    :Network<UGraph, QNodeItem<UGraph>, QEdgeItem>(graph),
-      QNetwork<UGraph>(graph), UNetwork<QNodeItem<UGraph>, QEdgeItem>(graph)
+      :QNetwork<UGraph>(graph)
 {
    //add draw edge
    pEdge data;
@@ -82,10 +86,10 @@ QUNetwork::QUNetwork(UGraph::pGraph &graph)
    {
       for(auto other = node->begin(); other != node->end(); other++)
       {
-	 data = new QEdgeItem(GetNodeData(node)->pos(),
-                  GetNodeData(*other)->pos());
+     data = new QEdgeItem(pnetwork->GetNodeData(node)->pos(),
+                  pnetwork->GetNodeData(*other)->pos());
 	 
-	 SetEdgeData(node, *other, data);
+     pnetwork->SetEdgeData(node, *other, data);
       }
    }
 }
@@ -97,31 +101,32 @@ QUNetwork::~QUNetwork()
 
 void QUNetwork::RedrawNode(size_t indexOfNode)
 {
-   auto node = graph->find(indexOfNode);
+   auto node = pnetwork->GetTopology()->find(indexOfNode);
    for(auto other = node->begin(); other != node->end(); other++)
    {
-       scn::UNetwork<QNodeItem<UGraph>, QEdgeItem>::GetEdgeData(node, *other)->UpdatePosition(
-                   scn::UNetwork<QNodeItem<UGraph>, QEdgeItem>::GetNodeData(node)->pos(),
-                   scn::UNetwork<QNodeItem<UGraph>, QEdgeItem>::GetNodeData(*other)->pos());
+       pnetwork->GetEdgeData(node, *other)->UpdatePosition(
+                   pnetwork->GetNodeData(node)->pos(),
+                   pnetwork->GetNodeData(*other)->pos());
    }
 }
 
 void QUNetwork::DrawOnScene()
 {
+    auto graph = pnetwork->GetTopology();
    for(auto node = graph->begin(); node != graph->end(); node++)
    {
-       pNode data = this->GetNodeData(node);
+       pNode data = pnetwork->GetNodeData(node);
       scene->addItem(data);//add node
       for(auto other = node->begin(); other != node->end(); other++)
       {
      if(*node < *other)//avoid draw twice
-        scene->addItem(scn::UNetwork<QNodeItem<UGraph>, QEdgeItem>::GetEdgeData(node, *other));//add edge
+        scene->addItem(pnetwork->GetEdgeData(node, *other));//add edge
       }
    }
    SetNodeMoveable();
 }
 
-std::shared_ptr<QUNetwork> QUNetwork::ReadFromNetFile(QString &path)
+QUNetwork&& QUNetwork::ReadFromNetFile(QString &path)
 {
    //open file
    QFile file(path);
@@ -134,14 +139,14 @@ std::shared_ptr<QUNetwork> QUNetwork::ReadFromNetFile(QString &path)
    {
       QMessageBox::critical(nullptr, "Error !", "This file does not begin with *Vertices");
       file.close();
-      return nullptr;
+      return QUNetwork();
    }
    //create graph and network
    UGraph::pGraph graph(new UGraph());
-   shared_ptr<QUNetwork> network(new QUNetwork(graph));
+   QUNetwork network = QUNetwork(graph);
    size_t numberOfNodes;
    reader>>numberOfNodes;
-   size_t scene_size = network->CreateScene(numberOfNodes);
+   size_t scene_size = network.CreateScene(numberOfNodes);
    //read nodes
    QString line = reader.readLine();
    size_t indexOfNode, indexOfNode2;
@@ -159,7 +164,7 @@ std::shared_ptr<QUNetwork> QUNetwork::ReadFromNetFile(QString &path)
       line_reader.setString(&line);
       //read index and label
       line_reader>>indexOfNode>>label;
-      node_data = new QNodeItem<UGraph>(network.get());
+      node_data = new QNodeItem<UGraph>(&network);
       node_data->indexOfNode = indexOfNode;
       node_data->SetText(label);
       //read position
@@ -173,7 +178,7 @@ std::shared_ptr<QUNetwork> QUNetwork::ReadFromNetFile(QString &path)
 	 node_data->setZValue(0);
       //add node and data
       graph->AddNode(indexOfNode);
-      network->SetNodeData(indexOfNode, node_data);
+      network(indexOfNode) = node_data;
       //read next line
       line = reader.readLine();
    }
@@ -184,16 +189,16 @@ std::shared_ptr<QUNetwork> QUNetwork::ReadFromNetFile(QString &path)
    {
       line_reader.setString(&line);
       line_reader>>indexOfNode>>indexOfNode2>>weight;
-      edge_data = new QEdgeItem(network->GetNodeData(indexOfNode)->pos(),
+      edge_data = new QEdgeItem(network.GetNodeData(indexOfNode)->pos(),
 				network->GetNodeData(indexOfNode2)->pos());
       graph->AddEdge(indexOfNode, indexOfNode2);
-      network->SetEdgeData(indexOfNode, indexOfNode2, edge_data);
+      network.SetEdgeData(indexOfNode, indexOfNode2, edge_data);
       line = reader.readLine();
    }
    file.close();
    assert(graph->GetNumberOfNodes() == numberOfNodes);
-   network->path_name = path;
-   return network;
+   network.path_name = path;
+   return move(network);
 }
 
 void QUNetwork::WriteToNetFile(QString &path)
@@ -225,4 +230,9 @@ void QUNetwork::WriteToNetFile(QString &path)
       }
    }
    file.close();
+}
+
+UGraph::pGraph QUNetwork::GetTopology()
+{
+    return pnetwork->GetTopology();
 }

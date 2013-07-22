@@ -30,15 +30,18 @@ class QEdgeItem;
 ///////////////////////////////////////////////////////////////////
 template<class GraphType>
 class QNetwork
-        :virtual public scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>
 {
 public:
-    using typename scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>::pEdge;
-    using typename scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>::pNode;
 
-    QNetwork(typename GraphType::pGraph graph);
+    QNetwork();
+
+    QNetwork(typename GraphType::pGraph);
 
     ~QNetwork();
+
+    typedef typename scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>::pNode pNode;
+    typedef typename scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>::pEdge pEdge;
+
 public:
 
     size_t CreateScene(size_t numberOfNode);
@@ -50,6 +53,11 @@ public:
     QString GetPathName();
 
     virtual void RedrawNode(size_t indexOfNode) = 0;
+
+    pNode& operator()(size_t indexOfNode)
+    {
+        return pnetwork->GetNodeData(indexOfNode);
+    }
 
 protected:
 
@@ -63,16 +71,16 @@ protected:
 
     shared_ptr<QGraphicsScene> scene;
 
+    shared_ptr<scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>> pnetwork;
     QString path_name;
-
-    using scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>::graph;
-    using scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>::node_data;
 };
 
 class QUNetwork
-        :public QNetwork<UGraph>, public UNetwork<QNodeItem<UGraph>, QEdgeItem>
+        :public QNetwork<UGraph>
 {
 public:
+
+    QUNetwork();
 
     QUNetwork(UGraph::pGraph &graph);
 
@@ -85,17 +93,15 @@ public:
  * @param path -  path
  * @return - new object of QUNetwork
  */
-    static std::shared_ptr<QUNetwork> ReadFromNetFile(QString &path);
+    static QUNetwork&& ReadFromNetFile(QString &path);
 
     void WriteToNetFile(QString &path);
+
+    UGraph::pGraph GetTopology();
 
     void DrawOnScene();
 
     virtual void RedrawNode(size_t indexOfNode);
-
-protected:
-
-     using scn::Network<UGraph, QNodeItem<UGraph>, QEdgeItem>::graph;
 };
 
 template<class GraphType>
@@ -274,8 +280,14 @@ private:
 
 /////////////////////////////////////////////////////////////////////
 template<class GraphType>
+QNetwork<GraphType>::QNetwork()
+    :pnetwork(new scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>())
+{
+}
+
+template<class GraphType>
 QNetwork<GraphType>::QNetwork(typename GraphType::pGraph graph)
-    :scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>(graph)
+    :pnetwork(new scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>(graph))
 {
     CreateScene(graph->GetNumberOfNodes());
     //create draw node
@@ -284,8 +296,7 @@ QNetwork<GraphType>::QNetwork(typename GraphType::pGraph graph)
        pNode data = new QNodeItem<GraphType>(this);
        data->indexOfNode = *node;
        data->SetText(QString("%1").arg(*node));
-
-       scn::Network<UGraph, QNodeItem<UGraph>, QEdgeItem>::SetNodeData(node, data);
+       pnetwork->SetNodeData(node, data);
     }
     //create position
     CreateCirclePosition();
@@ -307,9 +318,10 @@ size_t QNetwork<GraphType>::CreateScene(size_t numberOfNode)
 template<class GraphType>
 void QNetwork<GraphType>::SetNodeMoveable()
 {
-   for(auto node = node_data.begin(); node != node_data.end(); node++)
+    auto graph = pnetwork->GetTopology();
+   for(auto node = graph->begin(); node != graph->end(); node++)
    {
-      node->second->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+       pnetwork->GetNodeData(node)->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
    }
 }
 
@@ -317,6 +329,7 @@ template<class GraphType>
 void QNetwork<GraphType>::CreateCirclePosition()
 {
    QPointF center(scene->width() / 2, scene->height() / 2);
+   auto graph = pnetwork->GetTopology();
    double radius = min(center.x(), center.y());
    double angle = 0;
    double delta = 2* 3.14 / graph->GetNumberOfNodes();
@@ -335,7 +348,7 @@ template<class GraphType>
 void QNetwork<GraphType>::CreateRandomPosition()
 {
    srand(time(00));
-
+   auto graph = pnetwork->GetTopology();
    for(auto node = graph->begin(); node != graph->end(); node++)
    {
       pNode data = GetNodeData(node);

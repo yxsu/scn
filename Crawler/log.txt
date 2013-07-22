@@ -1,0 +1,5 @@
+[2013-07-22 11:39:12,217 WARNING] (23, 'Failed writing body (0 != 2762)')
+[2013-07-22 11:39:38,550 WARNING] (23, 'Failed writing body (0 != 2648)')
+[2013-07-22 11:40:18,877 WARNING] (23, 'Failed writing body (0 != 2816)')
+[2013-07-22 11:42:26,473 WARNING] (23, 'Failed writing body (0 != 2613)')
+[2013-07-22 11:47:55,121 WARNING] <class 'mysql.connector.errors.InterfaceError'>

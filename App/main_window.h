@@ -65,7 +65,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    std::shared_ptr<QUNetwork> unetwork;
+    QUNetwork unetwork;
     DistanceComputation distance_thread;
     LambdaComputation lambda_thread;
     Foursquare foursquare;

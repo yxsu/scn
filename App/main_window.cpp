@@ -45,18 +45,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::DrawAndCompute()
 {
-    if(unetwork->GetTopology()->GetNumberOfNodes() < 1000)
+    if(unetwork.GetTopology()->GetNumberOfNodes() < 1000)
     {
-        unetwork->DrawOnScene();
+        unetwork.DrawOnScene();
         UpdateGraphivsView();
     }
 
-    ComputeBasicInfo(unetwork->GetTopology());
+    ComputeBasicInfo(unetwork.GetTopology());
 }
 
 void MainWindow::UpdateGraphivsView()
 {
-    ui->graphivsView_main->setScene(unetwork->GetScene());
+    ui->graphivsView_main->setScene(unetwork.GetScene());
 }
 
 void MainWindow::ComputeBasicInfo(scn::UGraph::pGraph graph)
@@ -151,9 +151,9 @@ void MainWindow::on_action_open_net_file_triggered()
 
 void MainWindow::on_action_save_net_file_triggered()
 {
-    if(unetwork)
+    if(!unetwork.GetTopology()->empty())
     {
-        QString filename = unetwork->GetPathName();
+        QString filename = unetwork.GetPathName();
         if(filename.isNull())
         {
             filename = QFileDialog::getSaveFileName(this, tr("Save as a Net File"), "",
@@ -161,7 +161,7 @@ void MainWindow::on_action_save_net_file_triggered()
             if(!filename.endsWith(".net"))
                 filename += ".net";
         }
-        unetwork->WriteToNetFile(filename);
+        unetwork.WriteToNetFile(filename);
         statusBar()->showMessage(tr("Write to ") + filename, 2000);
     }
 }
@@ -186,14 +186,14 @@ void MainWindow::on_action_regular_network_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenKNearestNetwork(numberOfNodes, k);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
 void MainWindow::on_pushButton_recompute_clicked()
 {
-    if(unetwork)
-        ComputeBasicInfo(unetwork->GetTopology());
+    if(!unetwork.GetTopology()->empty())
+        ComputeBasicInfo(unetwork.GetTopology());
     else
         QMessageBox::critical(this, tr("Error !"), tr("Please choose a network first!"));
 }
@@ -228,7 +228,7 @@ void MainWindow::on_action_ws_small_world_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenSmallWorldNetworkByWS(numberOfNodes, k, probability);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -262,7 +262,7 @@ void MainWindow::on_action_nw_small_world_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenSmallWorldNetworkByNW(numberOfNodes, k, probability);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -288,7 +288,7 @@ void MainWindow::on_action_random_network_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenRandomNetwork(numberOfNodes, probability);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -314,7 +314,7 @@ void MainWindow::on_action_scale_free_network_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenScaleFreeNetwork(numberOfNodes, k);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -332,7 +332,7 @@ void MainWindow::on_action_small_world_from_edge_iteration_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenSmallWorldByEdgeIteration(times);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -350,7 +350,7 @@ void MainWindow::on_action_uniform_recursive_tree_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenUniformRecursiveTree(numberOfNode);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -368,7 +368,7 @@ void MainWindow::on_action_durt_network_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenDURT(times);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -386,7 +386,7 @@ void MainWindow::on_action_small_world_from_durt_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenSmallWorldNetworkFromDURT(times);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -432,7 +432,7 @@ void MainWindow::on_action_community_network_triggered()
     //create
     UGraph::pGraph graph = scn::GenCommunityNetwork(numberOfNodes, numberOfCommunity,
                                                     inner_prob, outer_prob);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -450,7 +450,7 @@ void MainWindow::on_action_tsd_sfsw_network_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenTreeStructuredSFSW(times);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
@@ -468,21 +468,21 @@ void MainWindow::on_action_tsd_sw_network_triggered()
     }
     //create
     UGraph::pGraph graph = scn::GenTreeStructuredSW(times);
-    unetwork.reset(new QUNetwork(graph));
+    unetwork = QUNetwork(graph);
     DrawAndCompute();
 }
 
 void MainWindow::on_action_stimulated_annealing_triggered()
 {
     DialogEnhanceSync dialog(this);
-    if(unetwork)
+    if(!unetwork.GetTopology()->empty())
     {
-        dialog.SetInitialGraph(unetwork->GetTopology());
+        dialog.SetInitialGraph(unetwork.GetTopology());
         dialog.exec();
         if(dialog.result() == QDialog::Accepted)
         {
             auto graph = dialog.GetFinalGraph();
-            unetwork.reset(new QUNetwork(graph));
+            unetwork = QUNetwork(graph);
             DrawAndCompute();
         }
     }
