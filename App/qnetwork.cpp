@@ -73,7 +73,7 @@ void QEdgeItem::UpdatePosition(QPointF &&head, QPointF &&tail)
 }
 
 QUNetwork::QUNetwork()
-    :QNetwork<UGraph>()
+    //:pnetwork(new scn::Network<UGraph, QNodeItem<UGraph>, QEdgeItem>())
 {
 }
 
@@ -189,10 +189,10 @@ QUNetwork&& QUNetwork::ReadFromNetFile(QString &path)
    {
       line_reader.setString(&line);
       line_reader>>indexOfNode>>indexOfNode2>>weight;
-      edge_data = new QEdgeItem(network.GetNodeData(indexOfNode)->pos(),
-				network->GetNodeData(indexOfNode2)->pos());
+      edge_data = new QEdgeItem(network(indexOfNode)->pos(),
+                network(indexOfNode2)->pos());
       graph->AddEdge(indexOfNode, indexOfNode2);
-      network.SetEdgeData(indexOfNode, indexOfNode2, edge_data);
+      network(indexOfNode, indexOfNode2) = edge_data;
       line = reader.readLine();
    }
    file.close();
@@ -210,10 +210,11 @@ void QUNetwork::WriteToNetFile(QString &path)
    }
    float scene_size = scene->width();
    QTextStream writer(&file);
+   auto graph = GetTopology();
    writer<<"*Vertices "<<graph->GetNumberOfNodes()<<endl;
    for(auto node = graph->begin(); node != graph->end(); node++)
    {
-      auto data = GetNodeData(node);
+      auto data = (*this)(*node);
       writer<<*node + 1<<"  "<<data->GetText()<<"    "<<data->x() / scene_size<<" "
 	    <<data->y() / scene_size<<" "<<data->zValue()<<endl;
    }
@@ -225,14 +226,9 @@ void QUNetwork::WriteToNetFile(QString &path)
       {
 	 if(*other < *node)
 	 {
-	    writer<<*node + 1<<" "<<*other + 1<<" "<<GetEdgeData(node, *other)->weight<<endl;
+        writer<<*node + 1<<" "<<*other + 1<<" "<<(*this)(*node, *other)->weight<<endl;
 	 }
       }
    }
    file.close();
-}
-
-UGraph::pGraph QUNetwork::GetTopology()
-{
-    return pnetwork->GetTopology();
 }

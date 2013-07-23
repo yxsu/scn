@@ -62,8 +62,8 @@ class FetchLocation:
         """
             #set database connection
         if not self.connector or not self.connector.is_connected():
-            connector = mysql.connector.connect(user='root', password='s131413324',
-                                                host = '127.0.0.1', database='check_in')
+            connector = mysql.connector.connect(user='air', password='s131413324',
+                                                host = '10.10.18.233', database='check_in')
         encoded_json = json.loads(data_stream)
         if not encoded_json['coordinates']:
             return -1
@@ -98,8 +98,8 @@ class FetchLocation:
         """run the fetching progress forever. 
         The only procedure before this run is to call SetSearchRegion()
         """
-        self.connector =  mysql.connector.connect(user='root', password='s131413324',
-                                                host = '127.0.0.1', database='check_in')
+        self.connector =  mysql.connector.connect(user='air', password='s131413324',
+                                                host = '10.10.18.233', database='check_in')
         while True:
             #set timestamp
             self.parameter['oauth_nonce'] = generate_nonce()
@@ -142,7 +142,7 @@ if __name__ == '__main__':
     crawler.SetSearchRegion([-74.5, 40.5], [-73, 41])
     #London
     #crawler.SetSearchRegion([-0.5, 51.35], [0.3, 51.65])
-    crawler.Run()
+    #crawler.Run()
 
 
 

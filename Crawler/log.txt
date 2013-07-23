@@ -613,3 +613,7 @@
 [2013-07-23 08:51:43,108 WARNING] (23, 'Failed writing body (0 != 2706)')
 [2013-07-23 08:52:43,246 WARNING] (23, 'Failed writing body (0 != 2889)')
 [2013-07-23 08:55:05,141 WARNING] (23, 'Failed writing body (0 != 2816)')
+[2013-07-23 09:33:59,499 WARNING] (7, "couldn't connect to host")
+[2013-07-23 09:35:17,907 WARNING] (7, "couldn't connect to host")
+[2013-07-23 09:36:36,295 WARNING] (7, "couldn't connect to host")
+[2013-07-23 09:37:54,629 WARNING] (7, "couldn't connect to host")

@@ -93,7 +93,7 @@ namespace scn
       
       virtual pEdge GetEdgeData(typename GraphType::iterator head, size_t indexOfTail) = 0;
 
-      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail) = 0;
+      virtual pEdge& GetEdgeData(size_t indexOfHead, size_t indexOfTail) = 0;
   
    protected:
       
@@ -202,7 +202,7 @@ namespace scn
 	 }
       }
 
-      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail)
+      virtual pEdge& GetEdgeData(size_t indexOfHead, size_t indexOfTail)
       {
      assert(indexOfHead <= 0xffffffff);
 	 assert(indexOfTail <= 0xffffffff);
@@ -288,7 +288,7 @@ namespace scn
           return edge_data[index + *head];
       }
 
-      virtual pEdge GetEdgeData(size_t indexOfHead, size_t indexOfTail)
+      virtual pEdge& GetEdgeData(size_t indexOfHead, size_t indexOfTail)
       {
           assert(indexOfHead <= 0xffffffff);
           assert(indexOfTail <= 0xffffffff);

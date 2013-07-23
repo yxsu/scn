@@ -46,6 +46,10 @@ public:
 
     size_t CreateScene(size_t numberOfNode);
 
+    typename GraphType::pGraph GetTopology(){return pnetwork->GetTopology();}
+
+    virtual void DrawOnScene() = 0;
+
     void CreatePosition();
 
     QGraphicsScene* GetScene();
@@ -57,6 +61,11 @@ public:
     pNode& operator()(size_t indexOfNode)
     {
         return pnetwork->GetNodeData(indexOfNode);
+    }
+
+    pEdge& operator()(size_t indexOfHead, size_t indexOfTail)
+    {
+        return pnetwork->GetEdgeData(indexOfHead, indexOfTail);
     }
 
 protected:
@@ -97,9 +106,7 @@ public:
 
     void WriteToNetFile(QString &path);
 
-    UGraph::pGraph GetTopology();
-
-    void DrawOnScene();
+    virtual void DrawOnScene();
 
     virtual void RedrawNode(size_t indexOfNode);
 };
@@ -281,13 +288,11 @@ private:
 /////////////////////////////////////////////////////////////////////
 template<class GraphType>
 QNetwork<GraphType>::QNetwork()
-    :pnetwork(new scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>())
 {
 }
 
 template<class GraphType>
 QNetwork<GraphType>::QNetwork(typename GraphType::pGraph graph)
-    :pnetwork(new scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>(graph))
 {
     CreateScene(graph->GetNumberOfNodes());
     //create draw node
@@ -319,10 +324,10 @@ template<class GraphType>
 void QNetwork<GraphType>::SetNodeMoveable()
 {
     auto graph = pnetwork->GetTopology();
-   for(auto node = graph->begin(); node != graph->end(); node++)
-   {
-       pnetwork->GetNodeData(node)->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-   }
+    for(auto node = graph->begin(); node != graph->end(); node++)
+    {
+        pnetwork->GetNodeData(node)->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    }
 }
 
 template<class GraphType>
@@ -336,11 +341,11 @@ void QNetwork<GraphType>::CreateCirclePosition()
 
    for(auto node = graph->begin(); node != graph->end(); node++)
    {
-      pNode data = scn::Network<GraphType, QNodeItem<GraphType>, QEdgeItem>::GetNodeData(node);
-      data->setPos(center.x() + radius * cos(angle),
-           center.y() + radius * sin(angle));
-      data->setZValue(0);
-      angle += delta;
+       auto data = (*this)(*node);
+       data->setPos(center.x() + radius * cos(angle),
+                    center.y() + radius * sin(angle));
+       data->setZValue(0);
+       angle += delta;
    }
 }
 
