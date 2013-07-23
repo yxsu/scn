@@ -120,6 +120,7 @@ class FetchLocation:
                 curl = pycurl.Curl()
                 curl.setopt(curl.WRITEFUNCTION, self.LocationCallBack)
                 curl.setopt(curl.URL, self.twitter_url)
+                curl.setopt(curl.PROXY, 'http://10.10.18.188:808')
                 curl.setopt(curl.POSTFIELDS, self.post_data)
                 curl.setopt(curl.VERBOSE, True)
                 curl.setopt(curl.HTTPHEADER, headers)
@@ -137,7 +138,10 @@ class FetchLocation:
 
 if __name__ == '__main__':
     crawler = FetchLocation()
+    #New York
     crawler.SetSearchRegion([-74.5, 40.5], [-73, 41])
+    #London
+    #crawler.SetSearchRegion([-0.5, 51.35], [0.3, 51.65])
     crawler.Run()
 
 
