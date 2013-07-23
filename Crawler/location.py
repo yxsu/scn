@@ -72,7 +72,7 @@ class FetchLocation:
             instance_check_in = {
                 'id_check_in': encoded_json['id'],
                 'created_time': datetime.strptime(encoded_json['created_at'], '%a %b %d %H:%M:%S +0000 %Y'),
-                'check_in_text': encoded_json['text'].encode('utf-8'),
+                'check_in_text': encoded_json['text'].encode('utf_8_sig'),
                 'source': encoded_json['source'],
                 'geo_type': encoded_json['coordinates']['type'],
                 'longtitude': encoded_json['coordinates']['coordinates'][0],
@@ -91,7 +91,7 @@ class FetchLocation:
             print str(e)
             return -1
            
-        print 'Send to Database : ' + encoded_json['text']
+        print 'Send to Database : ' + encoded_json['created_at']
         cursor.close()        
     
     def Run(self):
@@ -131,8 +131,8 @@ class FetchLocation:
                 curl.close()
                 logging.warning(str(e))
                 print type(e)
-                print "wait for 60 seconds to re-connect..."
-                time.sleep(60)
+                print "wait for 3 seconds to re-connect..."
+                time.sleep(3)
 
 
 if __name__ == '__main__':
