@@ -29,7 +29,8 @@ HEADERS += network.h\
     network_measurements.hpp \
     network_generator.hpp \
     network_random_walk.hpp \
-    sa_optimal_graph.h
+    sa_optimal_graph.h \
+    DNetwork.hpp
 
 unix:!symbian {
     maemo5 {
