@@ -9,13 +9,9 @@ import time
 import mysql.connector
 import logging
 
-#try:
-#    from urlparse import parse_qs, parse_qsl
-#except ImportError:
-#    from cgi import parse_qs, parse_qsl
-
 class FetchLocation:
     twitter_url = 'https://stream.twitter.com/1.1/statuses/filter.json'
+    #please use personal pair of key and secret, instead of mine
     consumer_key = 'YXZm2FQ8mqkxDMKUOpKPpg'
     consumer_secret = 'QYr5cv2HWBRyEFlv55Lp40niY1dOxBOqqmSsOaOCY'
     access_token_key = '142674868-I1yPvLuTAupXc17AB8bDA8GbbnBwdXNgCwytSZmp'
@@ -139,9 +135,9 @@ class FetchLocation:
 if __name__ == '__main__':
     crawler = FetchLocation()
     #New York
-    #crawler.SetSearchRegion([-74.5, 40.5], [-73, 41])
+    crawler.SetSearchRegion([-74.5, 40.5], [-73, 41])
     #London
-    crawler.SetSearchRegion([-0.5, 51.35], [0.3, 51.65])
+    #crawler.SetSearchRegion([-0.5, 51.35], [0.3, 51.65])
     crawler.Run()
 
 

@@ -5,9 +5,10 @@
 #include <memory>
 namespace scn
 {
-using namespace std;
-constexpr size_t NaF = -1;
-
+   using namespace std;
+   constexpr size_t NaF = -1;
+   extern "C++" template<class NodeData, class EdgeData> class DNetwork;
+   extern "C++" template<class NodeData, class EdgeData> class _node_iterator;
    template<class EdgeData>
    class _edge_iterator
    {
@@ -18,14 +19,17 @@ constexpr size_t NaF = -1;
    public:
       _edge_iterator(){;}
       
-      _edge_iterator(typename std::unordered_map<size_t, EdgeData>::iterator &&iter)
+      _edge_iterator(typename std::unordered_map<size_t, shared_ptr<EdgeData>>::iterator &&iter)
 	 :iterator_base(iter){;}
       
       inline reference operator*() const
       {return iterator_base->first;}
       
       inline pointer operator->() const
-      {return std::addressof(iterator_base->second);}
+      {return iterator_base->second.get();}
+
+      inline EdgeData& data()
+      {return *(iterator_base->second);}
 
       inline _edge_iterator& operator++()
       {
@@ -60,35 +64,37 @@ constexpr size_t NaF = -1;
       }
 
    protected:
-      typename std::unordered_map<size_t, EdgeData>::iterator iterator_base;
+      typename std::unordered_map<size_t, shared_ptr<EdgeData>>::iterator iterator_base;
    };
    //provide a way to access undirected network
    class _edge_undirected_iterator
    {
       
    };
-   
+
    template<class NodeData, class EdgeData>
    class _node
    {
-   public:
-      typedef _edge_iterator<EdgeData> in_iterator;
-      typedef _edge_iterator<EdgeData> out_iterator;
-      typedef _edge_undirected_iterator u_itertor;
    public:
       _node(){;}
       _node(NodeData& node)
 	 :node_data(node){;}
       ~_node(){;}
    protected:
-      std::unordered_map<size_t, EdgeData> in_degree;
-      std::unordered_map<size_t, EdgeData> out_degree;
+      friend class DNetwork<NodeData, EdgeData>;
+      friend class _node_iterator<NodeData, EdgeData>;
+      std::unordered_map<size_t, shared_ptr<EdgeData>> in_degree;
+      std::unordered_map<size_t, shared_ptr<EdgeData>> out_degree;
       NodeData  node_data;
    };
 
    template<class NodeData, class EdgeData>
    class _node_iterator
    {
+   public:
+      typedef _edge_iterator<EdgeData> in_iterator;
+      typedef _edge_iterator<EdgeData> out_iterator;
+      typedef _edge_undirected_iterator u_itertor;
    public:
       typedef _node<NodeData, EdgeData> value_type;
       typedef size_t  reference;
@@ -102,6 +108,9 @@ constexpr size_t NaF = -1;
       
       inline reference operator*() const
       {return current->first;}
+
+      inline NodeData& data()
+      {return current->second.node_data;}
       
       inline pointer operator->()
       {return std::addressof(current->second.node_data);}
@@ -140,17 +149,17 @@ constexpr size_t NaF = -1;
 
    public://for edge access
       
-      inline typename _node<NodeData, EdgeData>::in_iterator in_begin()
-      {return _node<NodeData, EdgeData>::in_iterator(current->second.in_degree.begin());}
+      inline in_iterator in_begin()
+      {return in_iterator(current->second.in_degree.begin());}
       
-      inline typename _node<NodeData, EdgeData>::in_iterator in_end()
-      {return _node<NodeData, EdgeData>::in_iterator(current->second.in_degree.end());}
+      inline in_iterator in_end()
+      {return in_iterator(current->second.in_degree.end());}
       
-      inline typename _node<NodeData, EdgeData>::out_iterator out_begin()
-      {return _node<NodeData, EdgeData>::out_iterator(current->second.out_degree.begin());}
+      inline out_iterator out_begin()
+      {return out_iterator(current->second.out_degree.begin());}
 
-      inline typename _node<NodeData, EdgeData>::out_iterator out_end()
-      {return _node<NodeData, EdgeData>::out_iterator(current->second.out_degree.end());}
+      inline out_iterator out_end()
+      {return out_iterator(current->second.out_degree.end());}
 
       inline size_t GetDegree(){return current->second.in_degree.size() +
 	    current->second.out_degree.size();}
@@ -180,6 +189,14 @@ constexpr size_t NaF = -1;
       
       inline iterator find(size_t indexOfNode)
       {return iterator(node_list.find(indexOfNode));}
+
+      inline pair<size_t, size_t> size()
+      {
+          size_t edge_count = 0;
+          for(auto node = begin(); node != end(); node++)
+              edge_count += node.GetDegree();
+          return make_pair(node_list.size(), edge_count / 2);
+      }
       
    public:
       
@@ -196,13 +213,87 @@ constexpr size_t NaF = -1;
 	 node_list[indexOfNewNode] = _node<NodeData, EdgeData>(node);
       }
 
+      void AddEdge(size_t indexOfHead, size_t indexOfTail, EdgeData edge = EdgeData(), bool reverse = false)
+      {
+	 auto head = node_list.find(indexOfHead);
+	 auto tail = node_list.find(indexOfTail);
+	 assert(head != node_list.end());
+	 assert(tail != node_list.end());
+	 shared_ptr<EdgeData> temp(new EdgeData(edge));
+	 if(reverse)
+	 {
+	    head->second.out_degree.insert(make_pair(indexOfTail, temp));
+	    tail->second.in_degree.insert(make_pair(indexOfHead, temp));
+	 }
+	 else
+	 {
+	    head->second.in_degree.insert(make_pair(indexOfTail, temp));
+	    tail->second.out_degree.insert(make_pair(indexOfHead, temp));
+	 }
+      }
+
+      bool HasEdge(size_t indexOfHead, size_t indexOfTail, bool reverse = false)
+      {
+	 auto head = node_list.find(indexOfHead);
+	 auto tail = node_list.find(indexOfTail);
+	 assert(head != node_list.end());
+	 assert(tail != node_list.end());
+	 if(reverse)
+	    return head->second.out_degree.find(indexOfTail) != head->second.out_degree.end();
+	 else
+	    return tail->second.out_degree.find(indexOfHead) != tail->second.out_degree.end();
+      }
+
       bool HasNode(size_t indexOfNode)
       {return node_list.find(indexOfNode) != node_list.end();}
-      
+   
+   void RemoveEdge(size_t indexOfHead, size_t indexOfTail, bool reverse = false)
+   {
+      auto head = node_list.find(indexOfHead);
+      auto tail = node_list.find(indexOfTail);
+      assert(head != node_list.end());
+      assert(tail != node_list.end());
+      if(reverse)
+      {
+	 head->second.out_degree.erase(indexOfTail);
+	 tail->second.in_degree.erase(indexOfHead);
+      }
+      else
+      { 
+	 head->second.in_degree.erase(indexOfTail);
+	 tail->second.out_degree.erase(indexOfHead);
+      }
+   }
+
+   void RemoveNode(size_t indexOfNode)
+   {
+      auto node = node_list.find(indexOfNode);
+      assert(node != node_list.end());
+//in-degree
+      for(auto edge = node->second.in_degree.begin(); 
+	  edge != node->second.in_degree.end(); edge++)
+	 node_list[edge->first].out_degree.erase(indexOfNode);
+      //out-degree
+      for(auto edge = node->second.out_degree.begin();
+	  edge != node->second.out_degree.end(); edge++)
+	 node_list[edge->first].in_degree.erase(indexOfNode);
+//erase node
+      node_list.erase(node);
+   }
+   
+      iterator operator()(size_t indexOfNode)
+      {return find(indexOfNode);}
+
+      _edge_iterator<EdgeData> operator()(size_t indexOfHead, size_t indexOfTail)
+      {
+	 assert(HasEdge(indexOfHead, indexOfTail));
+	 return _edge_iterator<EdgeData>(node_list[indexOfHead].in_degree.find(indexOfTail));
+      }
    protected:
       std::unordered_map<size_t, _node<NodeData, EdgeData>> node_list;
 };
 }
+
 
 
 
